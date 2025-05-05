@@ -35,7 +35,20 @@ The RetellAI MCP server provides tools for:
 }
 ```
 
-## Setup
+## Example use cases:
+
+1. List all the numbers I have in retellai
+2. List all the agents I have
+3. Tell me more about pizza delivery agent
+4. Creating agent and calling example:
+   1. Create an agent that calls my local pizza shop, make sure to keep the conversation short and to the point.
+   2. Order a margeritta pizza
+   3. Payment will be done by cash on delivery
+   4. Send it to <address>
+   5. The agent should pretend to be me. My name is <your_name>
+   6. Make an outbound call to my local pizza shop at <phone_number>, using the usa number
+
+## Repo Setup
 
 1. Install dependencies:
 
