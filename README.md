@@ -11,6 +11,30 @@ The RetellAI MCP server provides tools for:
 - **Phone Number Management**: Provision and configure phone numbers
 - **Voice Management**: Access and use different voice options
 
+## Claude Desktop Setup
+
+1. Open `Claude Desktop` and press `CMD + ,` to go to `Settings`.
+2. Click on the `Developer` tab.
+3. Click on the `Edit Config` button.
+4. This will open the `claude_desktop_config.json` file in your file explorer.
+5. Get your Retell API key from the Retell dashboard (<https://dashboard.retellai.com/apiKey>).
+6. Add the following to your `claude_desktop_config.json` file. See [here](https://modelcontextprotocol.io/quickstart/user) for more details.
+7. Restart the Claude Desktop after editing the config file.
+
+```json
+{
+  "mcpServers": {
+    "retellai-mcp-server": {
+      "command": "npx",
+      "args": ["-y", "@abhaybabbar/retellai-mcp-server"],
+      "env": {
+        "RETELL_API_KEY": "<your_retellai_token>"
+      }
+    }
+  }
+}
+```
+
 ## Setup
 
 1. Install dependencies:
