@@ -123,7 +123,7 @@ export const registerCallTools = (server: McpServer, retellClient: Retell) => {
     createToolHandler(async (data) => {
       try {
         const batchCallDto = transformCreateBatchCallInput(data);
-        const batchCall = await retellClient.call.createBatchCall(batchCallDto);
+        const batchCall = await retellClient.batchCall.createBatchCall(batchCallDto);
         return transformBatchCallOutput(batchCall);
       } catch (error: any) {
         console.error(`Error creating batch call: ${error.message}`);

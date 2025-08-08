@@ -80,16 +80,17 @@ export const registerKnowledgeBaseTools = (
     UpdateKnowledgeBaseInputSchema.shape,
     createToolHandler(async (data) => {
       try {
-        // Knowledge base update method needs to be verified with SDK documentation
-        // For now, return success response indicating the operation was attempted
+        // Knowledge base update is not supported in SDK v4.41.0
+        // Return descriptive response indicating the limitation
         return {
-          success: true,
-          message: `Knowledge base ${data.knowledgeBaseId} update attempted`,
+          success: false,
+          message: `Knowledge base update is not available in SDK v4.41.0`,
           knowledge_base_id: data.knowledgeBaseId,
-          name: data.name,
-          description: data.description,
+          requested_changes: {
+            name: data.name,
+            description: data.description,
+          },
         };
-        return transformKnowledgeBaseOutput(knowledgeBase);
       } catch (error: any) {
         console.error(`Error updating knowledge base: ${error.message}`);
         throw error;
@@ -122,17 +123,23 @@ export const registerKnowledgeBaseTools = (
     createToolHandler(async (data) => {
       try {
         const documentData = transformCreateKnowledgeBaseDocumentInput(data);
-        const result = await retellClient.knowledgeBase.addSource(
+        
+        // Determine the correct parameter based on source type
+        let addSourcesParams: any = {};
+        if (data.sourceType === 'text') {
+          addSourcesParams.knowledge_base_texts = [{
+            text: data.sourceConfig.content || '',
+            title: data.sourceConfig.title || 'Untitled',
+          }];
+        } else if (data.sourceType === 'url') {
+          addSourcesParams.knowledge_base_urls = [data.sourceConfig.url];
+        }
+        
+        const result = await retellClient.knowledgeBase.addSources(
           data.knowledgeBaseId,
-          documentData
+          addSourcesParams
         );
-        return {
-          success: true,
-          message: `Document successfully added to knowledge base ${data.knowledgeBaseId}`,
-          knowledge_base_id: data.knowledgeBaseId,
-          source_id: result.source_id || "unknown",
-          source_type: data.sourceType,
-        };
+        return transformKnowledgeBaseOutput(result);
       } catch (error: any) {
         console.error(`Error creating knowledge base document: ${error.message}`);
         throw error;

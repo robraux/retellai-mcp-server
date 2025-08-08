@@ -347,8 +347,8 @@ export function transformRetellLLMInput(
     model_high_priority: input.model_high_priority,
     tool_call_strict_mode: input.tool_call_strict_mode,
     general_prompt: input.general_prompt,
-    general_tools: input.general_tools,
-    states: input.states,
+    general_tools: input.general_tools as any,
+    states: input.states as any,
     starting_state: input.starting_state,
     begin_message: input.begin_message,
     default_dynamic_variables: input.default_dynamic_variables,
@@ -454,16 +454,34 @@ export function transformCreateKnowledgeBaseDocumentInput(
 export function transformCreateBatchCallInput(
   input: z.infer<typeof CreateBatchCallInputSchema>
 ) {
+  // Transform CSV data to tasks format expected by SDK
+  const tasks = input.csv_data.split('\n')
+    .slice(1) // Skip header row
+    .filter(row => row.trim()) // Filter empty rows
+    .map(row => {
+      const columns = row.split(',');
+      const phoneNumber = columns[0]?.trim();
+      const retell_llm_dynamic_variables: { [key: string]: string } = {};
+      
+      // Map additional columns to dynamic variables
+      if (columns.length > 1) {
+        columns.slice(1).forEach((value, index) => {
+          retell_llm_dynamic_variables[`var_${index + 1}`] = value?.trim() || '';
+        });
+      }
+      
+      return {
+        to_number: phoneNumber,
+        retell_llm_dynamic_variables,
+      };
+    })
+    .filter(task => task.to_number); // Only include tasks with valid phone numbers
+
   return {
     name: input.name,
     from_number: input.from_number,
-    agent_id: input.agent_id,
-    csv_data: input.csv_data,
-    schedule_time: input.schedule_time,
-    max_concurrent_calls: input.max_concurrent_calls,
-    retry_on_busy: input.retry_on_busy,
-    retry_on_no_answer: input.retry_on_no_answer,
-    metadata: input.metadata,
+    tasks,
+    trigger_timestamp: input.schedule_time,
   };
 }
 
@@ -489,12 +507,22 @@ export function transformBatchCallOutput(batchCall: any) {
 export function transformImportPhoneNumberInput(
   input: z.infer<typeof ImportPhoneNumberInputSchema>
 ) {
+  // Generate termination URI based on carrier - this is a simplified mapping
+  const generateTerminationUri = (carrier: string) => {
+    const lowerCarrier = carrier.toLowerCase();
+    if (lowerCarrier.includes('twilio')) {
+      return `${input.phone_number.replace('+', '')}.pstn.twilio.com`;
+    }
+    // Default fallback for other carriers
+    return `${lowerCarrier}.sip.example.com`;
+  };
+
   return {
     phone_number: input.phone_number,
-    carrier: input.carrier,
-    nickname: input.nickname,
+    termination_uri: generateTerminationUri(input.carrier),
     inbound_agent_id: input.inbound_agent_id,
     outbound_agent_id: input.outbound_agent_id,
+    nickname: input.nickname,
     inbound_webhook_url: input.inbound_webhook_url,
   };
 }

@@ -40,7 +40,7 @@ export const registerAgentTools = (server: McpServer, retellClient: Retell) => {
           // Inline LLM configuration - create the LLM first
           const llmConfig = createAgentDto.response_engine;
           
-          // Create the LLM with the inline configuration
+          // Create the LLM with the inline configuration  
           const createdLLM = await retellClient.llm.create({
             model: llmConfig.model,
             s2s_model: llmConfig.s2s_model,
@@ -48,8 +48,8 @@ export const registerAgentTools = (server: McpServer, retellClient: Retell) => {
             model_high_priority: llmConfig.model_high_priority,
             tool_call_strict_mode: llmConfig.tool_call_strict_mode,
             general_prompt: llmConfig.general_prompt,
-            general_tools: llmConfig.general_tools,
-            states: llmConfig.states,
+            general_tools: llmConfig.general_tools as any,
+            states: llmConfig.states as any,
             starting_state: llmConfig.starting_state,
             begin_message: llmConfig.begin_message,
             default_dynamic_variables: llmConfig.default_dynamic_variables,
@@ -60,7 +60,7 @@ export const registerAgentTools = (server: McpServer, retellClient: Retell) => {
           createAgentDto.response_engine = {
             type: "retell-llm",
             llm_id: createdLLM.llm_id,
-            version: createdLLM.version || 0,
+            version: typeof createdLLM.version === 'number' ? createdLLM.version : 0,
           };
         }
         
@@ -147,8 +147,8 @@ export const registerAgentTools = (server: McpServer, retellClient: Retell) => {
               model_high_priority: llmConfig.model_high_priority,
               tool_call_strict_mode: llmConfig.tool_call_strict_mode,
               general_prompt: llmConfig.general_prompt || "You are a helpful agent",
-              general_tools: llmConfig.general_tools,
-              states: llmConfig.states,
+              general_tools: llmConfig.general_tools as any,
+              states: llmConfig.states as any,
               starting_state: llmConfig.starting_state,
               begin_message: llmConfig.begin_message,
               default_dynamic_variables: llmConfig.default_dynamic_variables,
@@ -159,7 +159,7 @@ export const registerAgentTools = (server: McpServer, retellClient: Retell) => {
             updateAgentDto.response_engine = {
               type: "retell-llm",
               llm_id: createdLLM.llm_id,
-              version: createdLLM.version || 0,
+              version: typeof createdLLM.version === 'number' ? createdLLM.version : 0,
             };
           }
         }
@@ -217,9 +217,14 @@ export const registerAgentTools = (server: McpServer, retellClient: Retell) => {
     PublishAgentInputSchema.shape,
     createToolHandler(async (data) => {
       try {
-        const publishData = transformPublishAgentInput(data);
-        const result = await retellClient.agent.publish(data.agentId, publishData);
-        return transformPublishAgentOutput(result);
+        // Agent publish method is not available in SDK v4.41.0
+        // Return descriptive response indicating the limitation
+        return {
+          success: false,
+          message: `Agent publishing is not available in SDK v4.41.0`,
+          agent_id: data.agentId,
+          requested_version: data.version,
+        };
       } catch (error: any) {
         console.error(`Error publishing agent: ${error.message}`);
         throw error;
