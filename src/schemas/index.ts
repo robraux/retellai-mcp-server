@@ -1240,41 +1240,89 @@ export const RetellLLMOutputSchema = z.object({
     )
     .nullable()
     .optional(),
-  // states: z
-  //   .array(
-  //     z.object({
-  //       name: z.string(),
-  //       state_prompt: z.string(),
-  //       edges: z
-  //         .array(
-  //           z.object({
-  //             destination_state_name: z.string(),
-  //             description: z.string(),
-  //             parameters: z
-  //               .object({
-  //                 type: z.literal("object"),
-  //                 properties: z.record(z.any()),
-  //                 required: z.array(z.string()),
-  //               })
-  //               .optional(),
-  //           })
-  //         )
-  //         .optional(),
-  //       tools: z
-  //         .array(
-  //           z.object({
-  //             type: z.string(),
-  //             name: z.string(),
-  //             description: z.string(),
-  //             parameters: z.record(z.any()).optional(),
-  //           })
-  //         )
-  //         .optional(),
-  //     })
-  //   )
-  //   .nullable()
-  //   .optional(),
-  // starting_state: z.string().nullable().optional(),
+  states: z
+    .array(
+      z.object({
+        name: z.string(),
+        state_prompt: z.string(),
+        edges: z
+          .array(
+            z.object({
+              destination_state_name: z.string(),
+              description: z.string(),
+              parameters: z
+                .object({
+                  type: z.literal("object"),
+                  properties: z.record(z.any()),
+                  required: z.array(z.string()),
+                })
+                .optional(),
+            })
+          )
+          .optional(),
+        tools: z
+          .array(
+            z.discriminatedUnion("type", [
+              z.object({
+                type: z.literal("end_call"),
+                name: z.string(),
+                description: z.string(),
+              }),
+              z.object({
+                type: z.literal("transfer_call"),
+                name: z.string(),
+                description: z.string(),
+                transfer_destination: z.discriminatedUnion("type", [
+                  z.object({
+                    type: z.literal("predefined"),
+                    value: z.enum(["voicemail", "operator"]),
+                    number: z.string(),
+                  }),
+                  z.object({
+                    type: z.literal("inferred"),
+                    description: z.string(),
+                    prompt: z.string(),
+                  }),
+                ]),
+              }),
+              z.object({
+                type: z.literal("check_availability_cal"),
+                name: z.string(),
+                description: z.string(),
+                calendar_url: z.string(),
+                cal_api_key: z.string(),
+                event_type_id: z.number(),
+              }),
+              z.object({
+                type: z.literal("book_appointment_cal"),
+                name: z.string(),
+                description: z.string(),
+                calendar_url: z.string(),
+                cal_api_key: z.string(),
+                event_type_id: z.number(),
+              }),
+              z.object({
+                type: z.literal("press_digit"),
+                name: z.string(),
+                description: z.string(),
+                digit: z.string(),
+              }),
+              z.object({
+                type: z.literal("custom"),
+                name: z.string(),
+                description: z.string(),
+                speak_after_execution: z.boolean(),
+                speak_during_execution: z.boolean(),
+                url: z.string(),
+              }),
+            ])
+          )
+          .optional(),
+      })
+    )
+    .nullable()
+    .optional(),
+  starting_state: z.string().nullable().optional(),
   begin_message: z.string().nullable().optional(),
   default_dynamic_variables: z.record(z.string()).nullable().optional(),
   knowledge_base_ids: z.array(z.string()).nullable().optional(),

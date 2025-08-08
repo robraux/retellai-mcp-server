@@ -97,13 +97,9 @@ export const registerPhoneNumberTools = (
     ImportPhoneNumberInputSchema.shape,
     createToolHandler(async (data) => {
       try {
-        // Phone number import might not be supported in current SDK version
-        // Return a placeholder response for now
-        return {
-          success: false,
-          message: `Phone number import not supported in current SDK version`,
-          phone_number: data.phone_number,
-        };
+        const importData = transformImportPhoneNumberInput(data);
+        const phoneNumber = await retellClient.phoneNumber.import(importData);
+        return transformImportPhoneNumberOutput(phoneNumber);
       } catch (error: any) {
         console.error(`Error importing phone number: ${error.message}`);
         throw error;

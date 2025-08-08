@@ -217,13 +217,9 @@ export const registerAgentTools = (server: McpServer, retellClient: Retell) => {
     PublishAgentInputSchema.shape,
     createToolHandler(async (data) => {
       try {
-        // Agent publishing might not be supported in current SDK version
-        // Return a placeholder response for now
-        return {
-          success: false,
-          message: `Agent publishing not supported in current SDK version`,
-          agent_id: data.agentId,
-        };
+        const publishData = transformPublishAgentInput(data);
+        const result = await retellClient.agent.publish(data.agentId, publishData);
+        return transformPublishAgentOutput(result);
       } catch (error: any) {
         console.error(`Error publishing agent: ${error.message}`);
         throw error;
