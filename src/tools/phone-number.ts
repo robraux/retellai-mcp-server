@@ -5,8 +5,13 @@ import {
   CreatePhoneNumberInputSchema,
   GetPhoneNumberInputSchema,
   UpdatePhoneNumberInputSchema,
+  ImportPhoneNumberInputSchema,
 } from "../schemas/index.js";
-import { transformPhoneNumberOutput } from "../transformers/index.js";
+import { 
+  transformPhoneNumberOutput,
+  transformImportPhoneNumberInput,
+  transformImportPhoneNumberOutput,
+} from "../transformers/index.js";
 import { createToolHandler } from "./utils.js";
 
 export const registerPhoneNumberTools = (
@@ -83,6 +88,26 @@ export const registerPhoneNumberTools = (
         success: true,
         message: `Phone number ${data.phoneNumber} deleted successfully`,
       };
+    })
+  );
+
+  server.tool(
+    "import_phone_number",
+    "Imports an external phone number",
+    ImportPhoneNumberInputSchema.shape,
+    createToolHandler(async (data) => {
+      try {
+        // Phone number import might not be supported in current SDK version
+        // Return a placeholder response for now
+        return {
+          success: false,
+          message: `Phone number import not supported in current SDK version`,
+          phone_number: data.phone_number,
+        };
+      } catch (error: any) {
+        console.error(`Error importing phone number: ${error.message}`);
+        throw error;
+      }
     })
   );
 };

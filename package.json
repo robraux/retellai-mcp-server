@@ -21,7 +21,9 @@
   "bin": {
     "@abhaybabbar/retellai-mcp-server": "build/index.js"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abhaybabbar/retellai-mcp-server.git"

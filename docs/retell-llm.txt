@@ -1,0 +1,1709 @@
+========================
+CODE SNIPPETS
+========================
+TITLE: Expose Local Webhook Endpoint Online using Ngrok
+DESCRIPTION: These commands guide you through installing Ngrok and then starting it to create a public HTTPS URL for your local http://localhost:8080 server. This allows external services like Retell AI to send webhooks to your development environment.
+
+SOURCE: https://docs.retellai.com/features/register-webhook
+
+LANGUAGE: Shell
+CODE:
+```
+brew install ngrok/ngrok/ngrok
+```
+
+LANGUAGE: Shell
+CODE:
+```
+ngrok http http://localhost:8080
+```
+
+----------------------------------------
+
+TITLE: Configure Telnyx Elastic SIP Trunking for Retell AI
+DESCRIPTION: This guide outlines the essential steps to set up an Elastic SIP Trunk on Telnyx, ensuring proper connectivity for calls with Retell AI. It covers FQDN setup, outbound authentication, and inbound/outbound settings.
+
+SOURCE: https://docs.retellai.com/deploy/telnyx
+
+LANGUAGE: Telnyx Configuration
+CODE:
+```
+1. Create Trunk:
+   - Type: FQDN
+   - Name: [Your Trunk Name]
+2. Add FQDN:
+   - FQDN: 5t4n6j0wnrl.sip.livekit.cloud
+   - DNS Record Type: SRC
+3. Outbound Calls Authentication:
+   - Method: credentials
+   - Username: [Your Username]
+   - Password: [Your Password]
+4. Inbound Setting:
+   - Number Format: +E.164
+   - Codecs: G722, G729, OPUS
+   - Transport Method: TCP
+   - SIP Region: [Your Region]
+5. Outbound Setting:
+   - Create new outbound voice profile
+   - Select profile in outbound setting
+```
+
+----------------------------------------
+
+TITLE: Reference Azure OpenAI Client Example
+DESCRIPTION: This section provides a link to an external GitHub repository containing an example client class for integrating with Azure OpenAI. It serves as a reference for developers implementing their own LLM integration with Retell AI.
+
+SOURCE: https://docs.retellai.com/integrate-llm/integrate-llm
+
+LANGUAGE: APIDOC
+CODE:
+```
+If you are using `Azure openAI`, you can find the example client class\n[here](https://github.com/RetellAI/retell-backend-node-demo/blob/main/src/llm_azure_openai.ts)\n\nIf you have your own custom LLM, you can use the examples above to adapt your\nLLM.
+```
+
+----------------------------------------
+
+TITLE: Example Prompt for Conditional Tool Calling
+DESCRIPTION: This snippet demonstrates how to embed explicit instructions within an LLM prompt to conditionally call a tool. It guides the LLM to identify user intent (e.g., refund, replacement) and trigger the appropriate action or state transition, such as calling the 'transfer_to_support' function for refund requests. This method is crucial for ensuring the LLM accurately invokes tools based on specific conversational cues and is applicable to Single/Multi-Prompt Agents.
+
+SOURCE: https://docs.retellai.com/build/prompt-engineering-guide
+
+LANGUAGE: Plaintext
+CODE:
+```
+...\n2. Ask if user needs a refund, or just retriving information.\n  - if user needs a refund, call function transfer_to_support to further assist user.\n  - if user needs a replacement, transition to replacement state.\n...
+```
+
+----------------------------------------
+
+TITLE: Install Retell AI Node.js SDK via npm
+DESCRIPTION: This snippet provides the command to install the Retell AI Node.js SDK using npm. This is the first step required to set up your development environment for integrating Retell AI functionalities into your Node.js application.
+
+SOURCE: https://docs.retellai.com/get-started/sdk
+
+LANGUAGE: Node.js
+CODE:
+```
+npm i retell-sdk
+```
+
+----------------------------------------
+
+TITLE: Configure AI to pronounce website URLs
+DESCRIPTION: This snippet provides instructions for an AI on how to correctly pronounce website URLs. It details how to handle domain name segments, individual letters, recognizable words, and the 'dot' before the top-level domain. The goal is to ensure clear and proper pronunciation for customers.
+
+SOURCE: https://docs.retellai.com/build/prompt-situation-guide
+
+LANGUAGE: Prompt
+CODE:
+```
+Whenever you encounter a website URL, please:
+Identify each segment of the domain name.
+If a segment consists of individual letters (e.g., "NK"), pronounce each letter using its spoken form in English (e.g., "N" → "en," "K" → "kay").
+If a segment is a recognizable word (e.g., "laundry"), pronounce it normally as that word.
+Pronounce "dot" before stating the top-level domain (e.g., "dot com," "dot net," "dot org," etc.).
+Example:
+"nklaundry.com" → "en-kay-laundry dot com"
+"abctest.net" → "A B C test dot net"
+"xyzco.org" → "ex-why-zee-co dot org"
+Adhere to this phonetic breakdown carefully to ensure clarity and proper pronunciation for customers.
+```
+
+----------------------------------------
+
+TITLE: Configure and Start Retell AI Web Call with Advanced Options
+DESCRIPTION: This snippet demonstrates how to start a web call with optional parameters like sample rate, audio device IDs, and raw audio emission. These options provide fine-grained control over audio quality and data handling during the call, enhancing customization.
+
+SOURCE: https://docs.retellai.com/deploy/web-call
+
+LANGUAGE: javascript
+CODE:
+```
+await retellWebClient.startCall({
+  accessToken: createCallResponse.access_token,
+  sampleRate: 24000, // (Optional) set sample rate of the audio capture and playback
+  // (Optional) device id of the mic.
+  captureDeviceId: "default",
+  // (Optional) device id of the speaker
+  playbackDeviceId:
+    "0ec1807fd0fe6e51b990660ec4e2ebb78sdfcba51e279815d00c423ce03407ff",
+  // (Optional) Whether to emit "audio" events that contain raw pcm audio bytes represented by Float32Array
+  emitRawAudioSamples: false,
+});
+```
+
+----------------------------------------
+
+TITLE: Install Retell Web SDK for JavaScript
+DESCRIPTION: This snippet demonstrates how to install the Retell Web SDK using npm, a package manager for JavaScript. It's the first step to integrate Retell AI's web call functionality into your frontend application.
+
+SOURCE: https://docs.retellai.com/deploy/web-call
+
+LANGUAGE: bash
+CODE:
+```
+npm install retell-client-js-sdk
+```
+
+----------------------------------------
+
+TITLE: Example 200 OK Response for List Agents API
+DESCRIPTION: This JSON snippet illustrates the structure of a successful 200 OK response when listing agents. It provides a comprehensive example of an agent object, detailing its various properties and their types, such as agent_id, response_engine, voice_id, and other configurations.
+
+SOURCE: https://docs.retellai.com/api-references/list-agents
+
+LANGUAGE: JSON
+CODE:
+```
+[
+  {
+    "agent_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+    "version": 0,
+    "is_published": false,
+    "response_engine": {
+      "type": "retell-llm",
+      "llm_id": "llm_234sdertfsdsfsdf",
+      "version": 0
+    },
+    "agent_name": "Jarvis",
+    "voice_id": "11labs-Adrian",
+    "voice_model": "eleven_turbo_v2",
+    "fallback_voice_ids": [
+      "openai-Alloy",
+      "deepgram-Angus"
+    ],
+    "voice_temperature": 1,
+    "voice_speed": 1,
+    "volume": 1,
+    "responsiveness": 1,
+    "interruption_sensitivity": 1,
+    "enable_backchannel": true,
+    "backchannel_frequency": 0.9,
+    "backchannel_words": [
+      "yeah",
+      "uh-huh"
+    ],
+    "reminder_trigger_ms": 10000,
+    "reminder_max_count": 2,
+    "ambient_sound": "coffee-shop",
+    "ambient_sound_volume": 1,
+    "language": "en-US",
+    "webhook_url": "https://webhook-url-here",
+    "boosted_keywords": [
+      "retell",
+      "kroger"
+    ],
+    "enable_transcription_formatting": true,
+    "opt_out_sensitive_data_storage": true,
+    "opt_in_signed_url": true,
+    "pronunciation_dictionary": [
+      {
+        "word": "actually",
+        "alphabet": "ipa",
+        "phoneme": "ˈæktʃuəli"
+      }
+    ],
+    "normalize_for_speech": true,
+    "end_call_after_silence_ms": 600000,
+    "max_call_duration_ms": 3600000,
+    "voicemail_option": {
+      "action": {
+        "type": "static_text",
+        "text": "Please give us a callback tomorrow at 10am."
+      }
+    },
+    "post_call_analysis_data": [
+      {
+        "type": "string",
+        "name": "customer_name",
+        "description": "The name of the customer.",
+        "examples": [
+          "John Doe",
+          "Jane Smith"
+        ]
+      }
+    ],
+    "post_call_analysis_model": "gpt-4o-mini",
+    "begin_message_delay_ms": 1000,
+    "ring_duration_ms": 30000,
+    "stt_mode": "fast",
+    "vocab_specialization": "general",
+    "allow_user_dtmf": true,
+    "user_dtmf_options": {
+      "digit_limit": 25,
+      "termination_key": "#",
+      "timeout_ms": 8000
+    },
+    "denoising_mode": "noise-cancellation",
+    "last_modification_timestamp": 1703413636133
+  }
+]
+```
+
+----------------------------------------
+
+TITLE: Create a Node.js Server Endpoint for Retell AI Webhooks
+DESCRIPTION: This Node.js snippet demonstrates how to set up an Express.js server to listen for Retell AI webhook events. It processes "call_started", "call_ended", and "call_analyzed" events, logging details to the console, and acknowledges the request with a 204 status.
+
+SOURCE: https://docs.retellai.com/features/register-webhook
+
+LANGUAGE: Node.js
+CODE:
+```
+// install the sdk: https://docs.retellai.com/get-started/sdk
+import { Retell } from "retell-sdk";
+import express, { Request, Response } from "express";
+
+const app = express();
+app.use(express.json());
+
+app.post("/webhook", (req: Request, res: Response) => {
+  const {event, call} = req.body;
+  switch (event) {
+    case "call_started":
+      console.log("Call started event received", call.call_id);
+      break;
+    case "call_ended":
+      console.log("Call ended event received", call.call_id);
+      break;
+    case "call_analyzed":
+      console.log("Call analyzed event received", call.call_id);
+      break;
+    default:
+      console.log("Received an unknown event:", event);
+  }
+  // Acknowledge the receipt of the event
+  res.status(204).send();
+});
+```
+
+----------------------------------------
+
+TITLE: Define State Transition Logic for Retell AI Multi-Prompt Agent
+DESCRIPTION: This snippet illustrates how to define state transition logic within a Retell AI multi-prompt agent. It shows an example of transitioning to a new state (`schedule_tour`) based on user input ('yes') or ending the call politely if the user is not interested or hesitant. This logic helps guide the conversation flow.
+
+SOURCE: https://docs.retellai.com/build/single-multi-prompt/write-multi-prompt
+
+LANGUAGE: Prompt Instructions
+CODE:
+```
+7. Ask if user is interested in an in person tour.
+ - if yes, transition to schedule_tour.
+ - if no or hesitant, call function end_call to hang up politely and say will reach out if any other interesting properties pop up.
+```
+
+----------------------------------------
+
+TITLE: Integrate Retell AI Knowledge Base with Agents
+DESCRIPTION: A step-by-step guide on accessing knowledge base settings, creating various types of knowledge base items (URL, File, Text), verifying added content, and connecting the knowledge base to an agent for query responses.
+
+SOURCE: https://docs.retellai.com/build/knowledge-base
+
+LANGUAGE: APIDOC
+CODE:
+```
+1. Access Knowledge Base Settings\n   - Navigate to your dashboard\n   - Select the \"Knowledge Base\" tab\n   - Click the \"Add\" button in the top-right corner\n\n2. Create Knowledge Base Items\n   - Choose from three types of knowledge sources:\n     a. URL: Import content from web pages\n        - Supports single pages or entire websites\n        - Automatically updates when content changes\n     b. File: Upload documents\n        - Supported formats: PDF, TXT, DOCX, etc.\n        - Maximum file size: 50MB\n     c. Text: Add custom content\n        - Paste or type direct information\n        - Ideal for specific instructions or data\n\n3. Verify Added Items\n   - View all added items\n   - Edit existing items\n   - Delete items when no longer needed\n\n4. Connect to Your Agent\n   - Open the agent editor\n   - Locate the \"Knowledge Base\" section\n   - Select the knowledge base items you want to use\n\nYour agent will now use this information when responding to queries related to the added content.
+```
+
+----------------------------------------
+
+TITLE: Retell API: Get Agent Versions Endpoint Details
+DESCRIPTION: This section details the `GET /get-agent-versions/{agent_id}` API endpoint. It describes the required authorization header, path parameters, and provides an example of the successful response body, outlining the structure of an agent version object.
+
+SOURCE: https://docs.retellai.com/api-references/get-agent-versions
+
+LANGUAGE: APIDOC
+CODE:
+```
+HTTP Method: GET
+Endpoint: /get-agent-versions/{agent_id}
+
+Authorizations:
+- Name: Authorization
+  Type: string
+  Location: header
+  Required: true
+  Description: "Authentication header containing API key (find it in dashboard). The format is \"Bearer YOUR_API_KEY\""
+
+Path Parameters:
+- Name: agent_id
+  Type: string
+  Required: true
+  Description: "Unique id of the agent versions to be retrieved."
+  Example: "16b980523634a6dc504898cda492e939"
+
+Responses:
+- Status: 200 OK
+  Description: "Successful response containing an array of agent version objects."
+  Body Example:
+    [
+      {
+        "agent_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+        "version": 0,
+        "is_published": false,
+        "response_engine": {
+          "type": "retell-llm",
+          "llm_id": "llm_234sdertfsdsfsdf",
+          "version": 0
+        },
+        "agent_name": "Jarvis",
+        "voice_id": "11labs-Adrian",
+        "voice_model": "eleven_turbo_v2",
+        "fallback_voice_ids": [
+          "openai-Alloy",
+          "deepgram-Angus"
+        ],
+        "voice_temperature": 1,
+        "voice_speed": 1,
+        "volume": 1,
+        "responsiveness": 1,
+        "interruption_sensitivity": 1,
+        "enable_backchannel": true,
+        "backchannel_frequency": 0.9,
+        "backchannel_words": [
+          "yeah",
+          "uh-huh"
+        ],
+        "reminder_trigger_ms": 10000,
+        "reminder_max_count": 2,
+        "ambient_sound": "coffee-shop",
+        "ambient_sound_volume": 1,
+        "language": "en-US",
+        "webhook_url": "https://webhook-url-here",
+        "boosted_keywords": [
+          "retell",
+          "kroger"
+        ],
+        "enable_transcription_formatting": true,
+        "opt_out_sensitive_data_storage": true,
+        "opt_in_signed_url": true,
+        "pronunciation_dictionary": [
+          {
+            "word": "actually",
+            "alphabet": "ipa",
+            "phoneme": "ˈæktʃuəli"
+          }
+        ],
+        "normalize_for_speech": true,
+        "end_call_after_silence_ms": 600000,
+        "max_call_duration_ms": 3600000,
+        "voicemail_option": {
+          "action": {
+            "type": "static_text",
+            "text": "Please give us a callback tomorrow at 10am."
+          }
+        },
+        "post_call_analysis_data": [
+          {
+            "type": "string",
+            "name": "customer_name",
+            "description": "The name of the customer.",
+            "examples": [
+              "John Doe",
+              "Jane Smith"
+            ]
+          }
+        ],
+        "post_call_analysis_model": "gpt-4o-mini",
+        "begin_message_delay_ms": 1000,
+        "ring_duration_ms": 30000,
+        "stt_mode": "fast",
+        "vocab_specialization": "general",
+        "allow_user_dtmf": true,
+        "user_dtmf_options": {
+          "digit_limit": 25,
+          "termination_key": "#",
+          "timeout_ms": 8000
+        },
+        "denoising_mode": "noise-cancellation",
+        "last_modification_timestamp": 1703413636133
+      }
+    ]
+```
+
+----------------------------------------
+
+TITLE: JavaScript Example: Retrieve Retell AI Knowledge Base
+DESCRIPTION: This JavaScript snippet demonstrates how to use the Retell SDK to retrieve details of a specific knowledge base. It requires an API key for authentication and the target knowledge base ID. The response object contains the knowledge base's properties.
+
+SOURCE: https://docs.retellai.com/api-references/get-knowledge-base
+
+LANGUAGE: JavaScript
+CODE:
+```
+import Retell from 'retell-sdk';
+
+const client = new Retell({
+  apiKey: 'YOUR_RETELL_API_KEY',
+});
+
+const knowledgeBaseResponse = await client.knowledgeBase.retrieve('kb_1234567890');
+
+console.log(knowledgeBaseResponse.knowledge_base_id);
+```
+
+----------------------------------------
+
+TITLE: Retrieve Agent Details (Retell API)
+DESCRIPTION: This section provides the API specification and a JavaScript code example for retrieving details of a specific agent. It outlines the required parameters, authentication method, and expected response structure.
+
+SOURCE: https://docs.retellai.com/api-references/get-agent
+
+LANGUAGE: JavaScript
+CODE:
+```
+import Retell from 'retell-sdk';
+
+const client = new Retell({
+  apiKey: 'YOUR_RETELL_API_KEY',
+});
+
+const agentResponse = await client.agent.retrieve('16b980523634a6dc504898cda492e939');
+
+console.log(agentResponse.agent_id);
+```
+
+LANGUAGE: APIDOC
+CODE:
+```
+{
+  "endpoint": {
+    "method": "GET",
+    "path": "/get-agent/{agent_id}",
+    "description": "Retrieve details of a specific agent."
+  },
+  "parameters": {
+    "header": [
+      {
+        "name": "Authorization",
+        "type": "string",
+        "required": true,
+        "description": "Authentication header containing API key (find it in dashboard). The format is \"Bearer YOUR_API_KEY\""
+      }
+    ],
+    "path": [
+      {
+        "name": "agent_id",
+        "type": "string",
+        "required": true,
+        "description": "Unique id of the agent to be retrieved.",
+        "example": "16b980523634a6dc504898cda492e939"
+      }
+    ],
+    "query": [
+      {
+        "name": "version",
+        "type": "integer",
+        "required": false,
+        "description": "Optional version of the API to use for this request. Default to latest version.",
+        "example": 1
+      }
+    ]
+  },
+  "responses": {
+    "200": {
+      "description": "Successful retrieval of agent details.",
+      "schema": {
+        "agent_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+        "version": 0,
+        "is_published": false,
+        "response_engine": {
+          "type": "retell-llm",
+          "llm_id": "llm_234sdertfsdsfsdf",
+          "version": 0
+        },
+        "agent_name": "Jarvis",
+        "voice_id": "11labs-Adrian",
+        "voice_model": "eleven_turbo_v2",
+        "fallback_voice_ids": [
+          "openai-Alloy",
+          "deepgram-Angus"
+        ],
+        "voice_temperature": 1,
+        "voice_speed": 1,
+        "volume": 1,
+        "responsiveness": 1,
+        "interruption_sensitivity": 1,
+        "enable_backchannel": true,
+        "backchannel_frequency": 0.9,
+        "backchannel_words": [
+          "yeah",
+          "uh-huh"
+        ],
+        "reminder_trigger_ms": 10000,
+        "reminder_max_count": 2,
+        "ambient_sound": "coffee-shop",
+        "ambient_sound_volume": 1,
+        "language": "en-US",
+        "webhook_url": "https://webhook-url-here",
+        "boosted_keywords": [
+          "retell",
+          "kroger"
+        ],
+        "enable_transcription_formatting": true,
+        "opt_out_sensitive_data_storage": true,
+        "opt_in_signed_url": true,
+        "pronunciation_dictionary": [
+          {
+            "word": "actually",
+            "alphabet": "ipa",
+            "phoneme": "ˈæktʃuəli"
+          }
+        ],
+        "normalize_for_speech": true,
+        "end_call_after_silence_ms": 600000,
+        "max_call_duration_ms": 3600000,
+        "voicemail_option": {
+          "action": {
+            "type": "static_text",
+            "text": "Please give us a callback tomorrow at 10am."
+          }
+        },
+        "post_call_analysis_data": [
+          {
+            "type": "string",
+            "name": "customer_name",
+            "description": "The name of the customer.",
+            "examples": [
+              "John Doe",
+              "Jane Smith"
+            ]
+          }
+        ],
+        "post_call_analysis_model": "gpt-4o-mini",
+        "begin_message_delay_ms": 1000,
+        "ring_duration_ms": 30000,
+        "stt_mode": "fast",
+        "vocab_specialization": "general",
+        "allow_user_dtmf": true,
+        "user_dtmf_options": {
+          "digit_limit": 25,
+          "termination_key": "#",
+          "timeout_ms": 8000
+        },
+        "denoising_mode": "noise-cancellation",
+        "last_modification_timestamp": 1703413636133
+      }
+    },
+    "400": {
+      "description": "Bad Request"
+    },
+    "401": {
+      "description": "Unauthorized"
+    },
+    "422": {
+      "description": "Unprocessable Entity"
+    },
+    "500": {
+      "description": "Internal Server Error"
+    }
+  }
+}
+```
+
+----------------------------------------
+
+TITLE: Example Response for Listing Retell LLMs (200 OK)
+DESCRIPTION: This JSON object illustrates a successful (HTTP 200 OK) response when listing Retell LLMs. It provides a detailed array of LLM configurations, including their IDs, models, prompts, tools, states, and other relevant properties.
+
+SOURCE: https://docs.retellai.com/api-references/list-retell-llms
+
+LANGUAGE: JSON
+CODE:
+```
+[
+  {
+    "llm_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+    "version": 0,
+    "is_published": false,
+    "model": "gpt-4o",
+    "s2s_model": "gpt-4o-realtime",
+    "model_temperature": 0,
+    "model_high_priority": true,
+    "tool_call_strict_mode": true,
+    "general_prompt": "You are ...",
+    "general_tools": [
+      {
+        "type": "end_call",
+        "name": "end_call",
+        "description": "End the call with user."
+      }
+    ],
+    "states": [
+      {
+        "name": "information_collection",
+        "state_prompt": "You will follow the steps below to collect information...",
+        "edges": [
+          {
+            "destination_state_name": "appointment_booking",
+            "description": "Transition to book an appointment."
+          }
+        ],
+        "tools": [
+          {
+            "type": "transfer_call",
+            "name": "transfer_to_support",
+            "description": "Transfer to the support team.",
+            "transfer_destination": {
+              "type": "predefined",
+              "number": "16175551212"
+            },
+            "transfer_option": {
+              "type": "cold_transfer",
+              "show_transferee_as_caller": false
+            }
+          }
+        ]
+      },
+      {
+        "name": "appointment_booking",
+        "state_prompt": "You will follow the steps below to book an appointment...",
+        "tools": [
+          {
+            "type": "book_appointment_cal",
+            "name": "book_appointment",
+            "description": "Book an annual check up.",
+            "cal_api_key": "cal_live_xxxxxxxxxxxx",
+            "event_type_id": 60444,
+            "timezone": "America/Los_Angeles"
+          }
+        ]
+      }
+    ],
+    "starting_state": "information_collection",
+    "begin_message": "Hey I am a virtual assistant calling from Retell Hospital.",
+    "default_dynamic_variables": {
+      "customer_name": "John Doe"
+    },
+    "knowledge_base_ids": [
+      "<string>"
+    ],
+    "last_modification_timestamp": 1703413636133
+  }
+]
+```
+
+----------------------------------------
+
+TITLE: Configure AI to pronounce times and dates
+DESCRIPTION: This snippet provides specific rules for an AI to pronounce times and dates correctly. It clarifies how to state AM/PM times, ensuring 'O'clock' is avoided and 'AM' or 'PM' is always included. This ensures consistent and clear time announcements.
+
+SOURCE: https://docs.retellai.com/build/prompt-situation-guide
+
+LANGUAGE: Prompt
+CODE:
+```
+For State Numbers, Times & Dates
+For 1:00 PM, say "One PM."
+For 3:30 PM, say "Three thirty PM."
+For 8:45 AM, say "Eight forty-five AM."
+Never say O'clock, Instead just say O-Clock.
+Always say "AM" or "PM".
+```
+
+----------------------------------------
+
+TITLE: Configure AI to stop response on hold
+DESCRIPTION: This snippet demonstrates how to configure an LLM to stop generating a response when a specific stop sequence, `NO_RESPONSE_NEEDED`, is met. It provides an example prompt to instruct the AI to output this sequence when the user indicates 'hold on'. This is useful for managing AI responses in specific conversational flows.
+
+SOURCE: https://docs.retellai.com/build/prompt-situation-guide
+
+LANGUAGE: Prompt
+CODE:
+```
+- when user says hold on, reply exactly the following: "NO_RESPONSE_NEEDED".
+```
+
+----------------------------------------
+
+TITLE: Migrate Retell AI SDKs to Call API V2
+DESCRIPTION: This guide details the necessary updates for both backend (Node.js, Python) and frontend SDKs when migrating to Retell AI's Call API V2. It covers method name changes, removal of deprecated audio websocket related codes, and new functionalities like mute/unmute. Ensure all SDK dependencies are updated to the latest versions.
+
+SOURCE: https://docs.retellai.com/api-references/migration-doc
+
+LANGUAGE: Node.js
+CODE:
+```
+// Backend SDK (Node.js) Updates:
+// 1. Update to newest SDK version.
+// 2. Remove any audio websocket related codes.
+// 3. Method name changes:
+//    - Outbound phone call: `create` -> `createPhoneCall`
+//    - Web call: `register` -> `createWebCall`
+// 4. Remove dependencies on deleted fields.
+```
+
+LANGUAGE: Python
+CODE:
+```
+# Backend SDK (Python) Updates:
+# 1. Update to newest SDK version.
+# 2. Remove any audio websocket related codes.
+# 3. Method name changes:
+#    - Outbound phone call: `create` -> `create_phone_call`
+#    - Web call: `register` -> `create_web_call`
+# 4. Remove dependencies on deleted fields.
+```
+
+LANGUAGE: JavaScript
+CODE:
+```
+// Frontend SDK Updates:
+// 1. Update to newest SDK version.
+// 2. Method name changes:
+//    - `startConversation` -> `startCall` (requires access token parameter)
+//    - `stopConversation` -> `stopCall`
+// 3. Event naming changes: camelCase to snake_case.
+// 4. New functions: `mute()` and `unmute()`.
+```
+
+----------------------------------------
+
+TITLE: Example JSON Response for Retell AI Get Voice API
+DESCRIPTION: This JSON object illustrates the typical successful response structure when retrieving voice details from the Retell AI API. It includes the voice's unique ID, name, provider, accent, gender, age, and a URL for a preview audio.
+
+SOURCE: https://docs.retellai.com/api-references/get-voice
+
+LANGUAGE: JSON
+CODE:
+```
+{
+  "voice_id": "11labs-Adrian",
+  "voice_name": "Adrian",
+  "provider": "elevenlabs",
+  "accent": "American",
+  "gender": "male",
+  "age": "Young",
+  "preview_audio_url": "https://retell-utils-public.s3.us-west-2.amazonaws.com/adrian.mp3"
+}
+```
+
+----------------------------------------
+
+TITLE: Example Retell Agent Creation API Response
+DESCRIPTION: This JSON snippet provides an example of a successful response (HTTP 201) after creating a new agent via the Retell API. It showcases the comprehensive structure of the created agent object, including its ID, version, response engine configuration, voice settings, and various other advanced parameters.
+
+SOURCE: https://docs.retellai.com/api-references/create-agent
+
+LANGUAGE: JSON
+CODE:
+```
+{
+  "agent_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+  "version": 0,
+  "is_published": false,
+  "response_engine": {
+    "type": "retell-llm",
+    "llm_id": "llm_234sdertfsdsfsdf",
+    "version": 0
+  },
+  "agent_name": "Jarvis",
+  "voice_id": "11labs-Adrian",
+  "voice_model": "eleven_turbo_v2",
+  "fallback_voice_ids": [
+    "openai-Alloy",
+    "deepgram-Angus"
+  ],
+  "voice_temperature": 1,
+  "voice_speed": 1,
+  "volume": 1,
+  "responsiveness": 1,
+  "interruption_sensitivity": 1,
+  "enable_backchannel": true,
+  "backchannel_frequency": 0.9,
+  "backchannel_words": [
+    "yeah",
+    "uh-huh"
+  ],
+  "reminder_trigger_ms": 10000,
+  "reminder_max_count": 2,
+  "ambient_sound": "coffee-shop",
+  "ambient_sound_volume": 1,
+  "language": "en-US",
+  "webhook_url": "https://webhook-url-here",
+  "boosted_keywords": [
+    "retell",
+    "kroger"
+  ],
+  "enable_transcription_formatting": true,
+  "opt_out_sensitive_data_storage": true,
+  "opt_in_signed_url": true,
+  "pronunciation_dictionary": [
+    {
+      "word": "actually",
+      "alphabet": "ipa",
+      "phoneme": "ˈæktʃuəli"
+    }
+  ],
+  "normalize_for_speech": true,
+  "end_call_after_silence_ms": 600000,
+  "max_call_duration_ms": 3600000,
+  "voicemail_option": {
+    "action": {
+      "type": "static_text",
+      "text": "Please give us a callback tomorrow at 10am."
+    }
+  },
+  "post_call_analysis_data": [
+    {
+      "type": "string",
+      "name": "customer_name",
+      "description": "The name of the customer.",
+      "examples": [
+        "John Doe",
+        "Jane Smith"
+      ]
+    }
+  ],
+  "post_call_analysis_model": "gpt-4o-mini",
+  "begin_message_delay_ms": 1000,
+  "ring_duration_ms": 30000,
+  "stt_mode": "fast",
+  "vocab_specialization": "general",
+  "allow_user_dtmf": true,
+  "user_dtmf_options": {
+    "digit_limit": 25,
+    "termination_key": "#",
+    "timeout_ms": 8000
+  },
+  "denoising_mode": "noise-cancellation",
+  "last_modification_timestamp": 1703413636133
+}
+```
+
+----------------------------------------
+
+TITLE: Example Successful Retell LLM Response Body
+DESCRIPTION: This JSON object illustrates the structure and typical content of a successful response when retrieving Retell LLM details. It includes various properties such as `llm_id`, `model`, `general_prompt`, `states`, and `tools`, providing a comprehensive view of the LLM configuration and its capabilities.
+
+SOURCE: https://docs.retellai.com/api-references/get-retell-llm
+
+LANGUAGE: JSON
+CODE:
+```
+{
+  "llm_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+  "version": 0,
+  "is_published": false,
+  "model": "gpt-4o",
+  "s2s_model": "gpt-4o-realtime",
+  "model_temperature": 0,
+  "model_high_priority": true,
+  "tool_call_strict_mode": true,
+  "general_prompt": "You are ...",
+  "general_tools": [
+    {
+      "type": "end_call",
+      "name": "end_call",
+      "description": "End the call with user."
+    }
+  ],
+  "states": [
+    {
+      "name": "information_collection",
+      "state_prompt": "You will follow the steps below to collect information...",
+      "edges": [
+        {
+          "destination_state_name": "appointment_booking",
+          "description": "Transition to book an appointment."
+        }
+      ],
+      "tools": [
+        {
+          "type": "transfer_call",
+          "name": "transfer_to_support",
+          "description": "Transfer to the support team.",
+          "transfer_destination": {
+            "type": "predefined",
+            "number": "16175551212"
+          },
+          "transfer_option": {
+            "type": "cold_transfer",
+            "show_transferee_as_caller": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "appointment_booking",
+      "state_prompt": "You will follow the steps below to book an appointment...",
+      "tools": [
+        {
+          "type": "book_appointment_cal",
+          "name": "book_appointment",
+          "description": "Book an annual check up.",
+          "cal_api_key": "cal_live_xxxxxxxxxxxx",
+          "event_type_id": 60444,
+          "timezone": "America/Los_Angeles"
+        }
+      ]
+    }
+  ],
+  "starting_state": "information_collection",
+  "begin_message": "Hey I am a virtual assistant calling from Retell Hospital.",
+  "default_dynamic_variables": {
+    "customer_name": "John Doe"
+  },
+  "knowledge_base_ids": [
+    "<string>"
+  ],
+  "last_modification_timestamp": 1703413636133
+}
+```
+
+----------------------------------------
+
+TITLE: Retell AI Prompt: Pronounce Phone Numbers with Pauses
+DESCRIPTION: This prompt guides the LLM to accurately pronounce phone numbers by spelling out digits and inserting pauses, leveraging Retell AI's 'Read Slowly' feature. It ensures consistent output formats like 'four one five - eight nine two - three two four five' for any input format, improving clarity for users.
+
+SOURCE: https://docs.retellai.com/build/prompt-situation-guide
+
+LANGUAGE: Prompt Engineering
+CODE:
+```
+When people ask about your phone number, your phone number is 4158923245
+
+## Guideline
+When speaking the phone number, transform the format as follows:
+- Input formats like 4158923245, (415) 892-3245, or 415-892-3245
+- Should be pronounced as: "four one five - eight nine two - three two four five"
+- Important: Don't omit the space around the dash when speaking
+
+```
+
+----------------------------------------
+
+TITLE: Create Retell LLM: API Request, JavaScript SDK, and Response
+DESCRIPTION: This section provides comprehensive documentation for creating a new Retell LLM. It includes the API endpoint details, required authorization, the structure of the request body, an example using the JavaScript SDK, and a sample successful JSON response.
+
+SOURCE: https://docs.retellai.com/api-references/create-retell-llm
+
+LANGUAGE: APIDOC
+CODE:
+```
+Method: POST
+Path: /create-retell-llm
+
+Authorizations:
+  - Name: Authorization
+    Type: string
+    Location: header
+    Required: true
+    Description: Authentication header containing API key (find it in dashboard). The format is "Bearer YOUR_API_KEY"
+
+Request Body:
+  Content-Type: application/json
+```
+
+LANGUAGE: JavaScript
+CODE:
+```
+import Retell from 'retell-sdk';
+
+const client = new Retell({
+  apiKey: 'YOUR_RETELL_API_KEY',
+});
+
+const llmResponse = await client.llm.create();
+
+console.log(llmResponse.llm_id);
+```
+
+LANGUAGE: JSON
+CODE:
+```
+{
+  "llm_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+  "version": 0,
+  "is_published": false,
+  "model": "gpt-4o",
+  "s2s_model": "gpt-4o-realtime",
+  "model_temperature": 0,
+  "model_high_priority": true,
+  "tool_call_strict_mode": true,
+  "general_prompt": "You are ...",
+  "general_tools": [
+    {
+      "type": "end_call",
+      "name": "end_call",
+      "description": "End the call with user."
+    }
+  ],
+  "states": [
+    {
+      "name": "information_collection",
+      "state_prompt": "You will follow the steps below to collect information...",
+      "edges": [
+        {
+          "destination_state_name": "appointment_booking",
+          "description": "Transition to book an appointment."
+        }
+      ],
+      "tools": [
+        {
+          "type": "transfer_call",
+          "name": "transfer_to_support",
+          "description": "Transfer to the support team.",
+          "transfer_destination": {
+            "type": "predefined",
+            "number": "16175551212"
+          },
+          "transfer_option": {
+            "type": "cold_transfer",
+            "show_transferee_as_caller": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "appointment_booking",
+      "state_prompt": "You will follow the steps below to book an appointment...",
+      "tools": [
+        {
+          "type": "book_appointment_cal",
+          "name": "book_appointment",
+          "description": "Book an annual check up.",
+          "cal_api_key": "cal_live_xxxxxxxxxxxx",
+          "event_type_id": 60444,
+          "timezone": "America/Los_Angeles"
+        }
+      ]
+    }
+  ],
+  "starting_state": "information_collection",
+  "begin_message": "Hey I am a virtual assistant calling from Retell Hospital.",
+  "default_dynamic_variables": {
+    "customer_name": "John Doe"
+  },
+  "knowledge_base_ids": [
+    "<string>"
+  ],
+  "last_modification_timestamp": 1703413636133
+}
+```
+
+----------------------------------------
+
+TITLE: Make a Phone Call with Retell AI Node.js SDK
+DESCRIPTION: This example illustrates how to programmatically initiate a phone call using the Retell AI Node.js SDK. It includes a try-catch block for error handling, ensuring robust call initiation. Remember to provide valid 'from_number' and 'to_number' values.
+
+SOURCE: https://docs.retellai.com/get-started/sdk
+
+LANGUAGE: Node.js
+CODE:
+```
+try {
+  const response = await retellClient.call.createPhoneCall({
+    from_number: '+14157774444',
+    to_number: '+12137774445',
+  });
+  console.log('Call initiated:', response);
+} catch (error) {
+  console.error('Error making call:', error);
+}
+```
+
+----------------------------------------
+
+TITLE: JavaScript Example: List Retell LLMs
+DESCRIPTION: This JavaScript code snippet demonstrates how to programmatically list all available Retell LLM Response Engines using the Retell SDK. It requires a valid API key for authentication and outputs the retrieved list to the console.
+
+SOURCE: https://docs.retellai.com/api-references/list-retell-llms
+
+LANGUAGE: JavaScript
+CODE:
+```
+import Retell from 'retell-sdk';
+
+const client = new Retell({
+  apiKey: 'YOUR_RETELL_API_KEY',
+});
+
+const llmResponses = await client.llm.list();
+
+console.log(llmResponses);
+```
+
+----------------------------------------
+
+TITLE: Test Retell AI Webhook Endpoint Locally with cURL
+DESCRIPTION: This cURL command simulates a "call_ended" event from Retell AI, sending a POST request with a detailed JSON payload to a local webhook endpoint. It's used to verify the endpoint's ability to receive and process webhook data before deployment.
+
+SOURCE: https://docs.retellai.com/features/register-webhook
+
+LANGUAGE: Shell
+CODE:
+```
+curl --location 'localhost:8080/webhook' \
+--header 'Content-Type: application/json' \
+--data '{
+  "event": "call_ended",
+  "call": {
+    "call_type": "phone_call",
+    "from_number": "+12137771234",
+    "to_number": "+12137771235",
+    "direction": "inbound",
+    "call_id": "Jabr9TXYYJHfvl6Syypi88rdAHYHmcq6",
+    "agent_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+    "call_status": "registered",
+    "metadata": {},
+    "retell_llm_dynamic_variables": {
+      "customer_name": "John Doe"
+    },
+    "start_timestamp": 1714608475945,
+    "end_timestamp": 1714608491736,
+    "disconnection_reason": "user_hangup",
+    "transcript": "...",
+    "opt_out_sensitive_data_storage": false
+  }
+}'
+```
+
+----------------------------------------
+
+TITLE: Steps to Create Batch Calls in Retell AI
+DESCRIPTION: This guide outlines the step-by-step process to create and manage batch calls within the Retell AI workspace, including preparing recipient lists and scheduling calls. It details UI interactions and data preparation for successful batch call campaigns.
+
+SOURCE: https://docs.retellai.com/deploy/create-batch-call
+
+LANGUAGE: APIDOC
+CODE:
+```
+Step 1: Click Create Batch Call
+Navigate to the Batch Call tab in the Retell AI workspace and click the “Create Batch Call” button located in the top-right corner.
+
+Step 2: Enter Call Name and Phone Number
+- Provide a unique name for the batch call to differentiate it from others.
+- Select the “From Number” from the dropdown menu.
+- Ensure the number is bound to agents to enable batch calls.
+
+Step 3: Upload CSV
+- Prepare your recipient list in CSV format with a header row including a “phone number” column.
+- Use the provided CSV template by clicking “Download the template,” or upload your custom file.
+- For dynamic variables, add additional columns in the CSV with custom data for each recipient (e.g., a column header `first_name` can be used as `{{first_name}}`).
+
+Step 4: Create Now or Schedule
+- Choose between “Send Now” to start the calls immediately or “Schedule” for a future time.
+- Click “Save as Draft” to revisit later or “Send” to initiate or schedule the calls.
+```
+
+----------------------------------------
+
+TITLE: Retell AI Prompt: Spell Out Email Addresses
+DESCRIPTION: This prompt instructs the LLM on the correct method to spell out email addresses, including the pronunciation of the '@' symbol as 'at'. It provides a clear guideline for converting email strings into a spoken format, such as 'n-a-m-e-@-c-o-m-p-a-n-y-dot-com'.
+
+SOURCE: https://docs.retellai.com/build/prompt-situation-guide
+
+LANGUAGE: Prompt Engineering
+CODE:
+```
+## How to spell out
+The possible email format is name@company.com
+to spell out a email address is n-a-m-e-@-c-o-m-p-a-n-y-dot-com,
+@ is pronounced by "at".
+
+```
+
+----------------------------------------
+
+TITLE: LLM Prompt Integration for Custom Function Calling
+DESCRIPTION: This example demonstrates how to instruct the LLM within its prompt to conditionally invoke a custom function, such as `get_weather`, based on user input like providing a city name. It guides the LLM on when and how to trigger the function.
+
+SOURCE: https://docs.retellai.com/build/single-multi-prompt/custom-function
+
+LANGUAGE: Plaintext
+CODE:
+```
+When user provided the city name, please get the weather for that city by calling the `get_weather` function.
+```
+
+----------------------------------------
+
+TITLE: Example Response for Retell LLM Update
+DESCRIPTION: This JSON object illustrates a successful response after updating a Retell LLM. It includes details such as the LLM ID, version, model, prompts, tools, states, and dynamic variables.
+
+SOURCE: https://docs.retellai.com/api-references/update-retell-llm
+
+LANGUAGE: JSON
+CODE:
+```
+{
+  "llm_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+  "version": 0,
+  "is_published": false,
+  "model": "gpt-4o",
+  "s2s_model": "gpt-4o-realtime",
+  "model_temperature": 0,
+  "model_high_priority": true,
+  "tool_call_strict_mode": true,
+  "general_prompt": "You are ...",
+  "general_tools": [
+    {
+      "type": "end_call",
+      "name": "end_call",
+      "description": "End the call with user."
+    }
+  ],
+  "states": [
+    {
+      "name": "information_collection",
+      "state_prompt": "You will follow the steps below to collect information...",
+      "edges": [
+        {
+          "destination_state_name": "appointment_booking",
+          "description": "Transition to book an appointment."
+        }
+      ],
+      "tools": [
+        {
+          "type": "transfer_call",
+          "name": "transfer_to_support",
+          "description": "Transfer to the support team.",
+          "transfer_destination": {
+            "type": "predefined",
+            "number": "16175551212"
+          },
+          "transfer_option": {
+            "type": "cold_transfer",
+            "show_transferee_as_caller": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "appointment_booking",
+      "state_prompt": "You will follow the steps below to book an appointment...",
+      "tools": [
+        {
+          "type": "book_appointment_cal",
+          "name": "book_appointment",
+          "description": "Book an annual check up.",
+          "cal_api_key": "cal_live_xxxxxxxxxxxx",
+          "event_type_id": 60444,
+          "timezone": "America/Los_Angeles"
+        }
+      ]
+    }
+  ],
+  "starting_state": "information_collection",
+  "begin_message": "Hey I am a virtual assistant calling from Retell Hospital.",
+  "default_dynamic_variables": {
+    "customer_name": "John Doe"
+  },
+  "knowledge_base_ids": [
+    "<string>"
+  ],
+  "last_modification_timestamp": 1703413636133
+}
+```
+
+----------------------------------------
+
+TITLE: Understand Retell AI Agent Versioning Concepts
+DESCRIPTION: This section outlines the core concepts of agent versioning in Retell AI, including its two main purposes: locking in configurations for production and providing version control with historical tracking. It also explains how version numbers are automatically updated and managed.
+
+SOURCE: https://docs.retellai.com/agent/version
+
+LANGUAGE: APIDOC
+CODE:
+```
+{
+  "concept": "Agent Versioning",
+  "description": "Versioning enables updating agents while keeping old versions unchanged for production use.",
+  "purposes": [
+    {
+      "name": "Lock in configuration",
+      "details": "Published versions cannot be changed. Specific versions can be assigned to phone numbers to lock agent configuration."
+    },
+    {
+      "name": "Version control & history",
+      "details": "Allows creating draft versions from past versions, tracking changes, and reverting to previous versions."
+    }
+  ],
+  "version_number_management": {
+    "mechanism": "Monotonically increasing integer",
+    "update_trigger": "Automatically updated when agent is published via 'Deployment' button in dashboard.",
+    "scope": "Both the agent and corresponding retell_llm or conversation flow share the same version number."
+  },
+  "example_versions": {
+    "0": "Initial version, first published.",
+    "1": "Second published version.",
+    "2": "Current version."
+  },
+  "limitation": "Published versions cannot be changed. Only the latest version can be modified.",
+  "how_to_generate_new_version": "Click the 'Deployment' button in the upper right corner of the agent page in the dashboard. This creates a new version of the agent and its associated LLM/conversation flow. An optional version title can be provided, and phone numbers can be attached for production use (or later via 'Phone Numbers' tab)."
+}
+```
+
+----------------------------------------
+
+TITLE: Retell AI Batch Call API Endpoint
+DESCRIPTION: API endpoint for initiating batch call operations in Retell AI.
+
+SOURCE: https://docs.retellai.com/api-references/migration-doc
+
+LANGUAGE: APIDOC
+CODE:
+```
+Batch Call API:
+- POST /api-references/create-batch-call: Create Batch Call
+```
+
+----------------------------------------
+
+TITLE: Example Server to Retell Config Event
+DESCRIPTION: Demonstrates a sample 'config' event sent from your server to Retell AI. This event is used to configure call-related settings, such as enabling auto-reconnect or requesting call details.
+
+SOURCE: https://docs.retellai.com/api-references/llm-websocket
+
+LANGUAGE: JSON
+CODE:
+```
+{
+  "response_type": "config",
+  "config": {
+    "auto_reconnect": true,
+    "call_details": true
+  }
+}
+```
+
+----------------------------------------
+
+TITLE: List Retell AI Phone Numbers API & Code Examples
+DESCRIPTION: This section details the API endpoint for retrieving a list of all phone numbers associated with your Retell AI account, along with a JavaScript code example and an illustrative JSON response. Ensure proper authorization with your API key.
+
+SOURCE: https://docs.retellai.com/api-references/list-phone-numbers
+
+LANGUAGE: APIDOC
+CODE:
+```
+Method: GET
+Path: /list-phone-numbers
+
+Authorizations:
+  Name: Authorization
+  Type: string
+  Location: header
+  Required: true
+  Description: Authentication header containing API key (find it in dashboard). The format is "Bearer YOUR_API_KEY"
+```
+
+LANGUAGE: JavaScript
+CODE:
+```
+import Retell from 'retell-sdk';
+
+const client = new Retell({
+  apiKey: 'YOUR_RETELL_API_KEY',
+});
+
+const phoneNumberResponses = await client.phoneNumber.list();
+
+console.log(phoneNumberResponses);
+```
+
+LANGUAGE: JSON
+CODE:
+```
+[
+  {
+    "phone_number": "+14157774444",
+    "phone_number_type": "retell-twilio",
+    "phone_number_pretty": "+1 (415) 777-4444",
+    "inbound_agent_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+    "outbound_agent_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+    "inbound_agent_version": 1,
+    "outbound_agent_version": 1,
+    "area_code": 415,
+    "nickname": "Frontdesk Number",
+    "inbound_webhook_url": "https://example.com/inbound-webhook",
+    "last_modification_timestamp": 1703413636133
+  }
+]
+```
+
+----------------------------------------
+
+TITLE: Define Basic Conversational Task Flow for AI Agent
+DESCRIPTION: This prompt snippet defines a sequential task flow for an AI agent, guiding it through initial user interaction to identify their needs (refund, replacement, or information). It outlines the steps for gathering user name and then branching based on their request, demonstrating a basic, continuous conversational progression.
+
+SOURCE: https://docs.retellai.com/build/single-multi-prompt/write-single-prompt
+
+LANGUAGE: Prompt Language
+CODE:
+```
+## Task
+1. Ask for user's name.
+2. Ask if user needs a refund, need a replacement, or just retriving information.
+  - if user needs a refund, transition to refund state.
+  - if user needs a replacement, transition to replacement state.
+3. If user is just retriving information, ask for the order number.
+...
+```
+
+----------------------------------------
+
+TITLE: Structure LLM Prompts with Sectional Prompts
+DESCRIPTION: Breaking large prompts into smaller, focused sections like identity, style, guideline, task, and goals improves reusability, maintainability, and LLM comprehension. This approach helps the LLM understand and follow instructions more reliably.
+
+SOURCE: https://docs.retellai.com/build/prompt-engineering-guide
+
+LANGUAGE: Plaintext
+CODE:
+```
+## Identify
+You are a friendly AI assistant for Retell AI. ....
+
+## Style Guardrails
+Be concise: ...
+Be conversational: ...
+...
+
+## Response Guideline
+Return dates in their spoken forms: ...
+Ask up to one question at a time: ...
+...
+
+## Rebuttals
+...
+```
+
+----------------------------------------
+
+TITLE: Retell AI LLM Response Engine API Endpoints
+DESCRIPTION: API endpoints for managing Retell LLM configurations, designed for single or multi-prompt agents, allowing for creation, retrieval, listing, updating, and deletion of LLM settings.
+
+SOURCE: https://docs.retellai.com/api-references/migration-doc
+
+LANGUAGE: APIDOC
+CODE:
+```
+Retell LLM Response Engine API:
+- POST /api-references/create-retell-llm: Create Retell LLM
+- GET /api-references/get-retell-llm: Get Retell LLM
+- GET /api-references/list-retell-llms: List Retell LLMs
+- PATCH /api-references/update-retell-llm: Update Retell LLM
+- DEL /api-references/delete-retell-llm: Delete Retell LLM
+```
+
+----------------------------------------
+
+TITLE: Example JSON Response for Listing Knowledge Bases
+DESCRIPTION: This JSON object illustrates the structure of a successful 200 OK response when listing knowledge bases. It shows an array of knowledge base objects, each with properties like ID, name, status, sources, and timestamps.
+
+SOURCE: https://docs.retellai.com/api-references/list-knowledge-bases
+
+LANGUAGE: json
+CODE:
+```
+[
+  {
+    "knowledge_base_id": "knowledge_base_a456426614174000",
+    "knowledge_base_name": "Sample KB",
+    "status": "in_progress",
+    "knowledge_base_sources": [
+      {
+        "type": "document",
+        "source_id": "<string>",
+        "filename": "<string>",
+        "file_url": "<string>"
+      }
+    ],
+    "enable_auto_refresh": true,
+    "last_refreshed_timestamp": 1703413636133
+  }
+]
+```
+
+----------------------------------------
+
+TITLE: Retell AI Voice API Endpoints
+DESCRIPTION: API endpoints for accessing and listing available voice options within the Retell AI platform.
+
+SOURCE: https://docs.retellai.com/api-references/migration-doc
+
+LANGUAGE: APIDOC
+CODE:
+```
+Voice API:
+- GET /api-references/get-voice: Get Voice
+- GET /api-references/list-voices: List Voices
+```
+
+----------------------------------------
+
+TITLE: Retell AI Custom LLM WebSocket API
+DESCRIPTION: WebSocket API for integrating custom LLMs with Retell AI, enabling real-time communication for LLM interactions.
+
+SOURCE: https://docs.retellai.com/api-references/migration-doc
+
+LANGUAGE: APIDOC
+CODE:
+```
+Custom LLM API:
+- WebSocket /api-references/llm-websocket: LLM WebSocket
+```
+
+----------------------------------------
+
+TITLE: Example Custom Function Response Body
+DESCRIPTION: Provides an example of an API response body from which dynamic variables can be extracted. This demonstrates the structure of data that Retell can parse for later use in conversations, such as extracting user details.
+
+SOURCE: https://docs.retellai.com/build/conversation-flow/custom-function
+
+LANGUAGE: JSON
+CODE:
+```
+{
+  "properties": {
+    "user": {
+      "name": "John Doe",
+      "age": 26
+    }
+  }
+}
+```
+
+----------------------------------------
+
+TITLE: Retell AI Get Knowledge Base API Parameters
+DESCRIPTION: This section details the required authorization header and path parameters for the Get Knowledge Base API endpoint. Authentication is done via a Bearer token containing your API key. The `knowledge_base_id` is a mandatory path parameter used to specify which knowledge base to retrieve.
+
+SOURCE: https://docs.retellai.com/api-references/get-knowledge-base
+
+LANGUAGE: APIDOC
+CODE:
+```
+Authorization:
+  Type: string
+  Location: header
+  Required: true
+  Description: Authentication header containing API key (find it in dashboard). The format is "Bearer YOUR_API_KEY"
+Path Parameters:
+  knowledge_base_id:
+    Type: string
+    Required: true
+    Description: The knowledge base id to retrieve.
+    Example: "kb_1234567890"
+```
+
+----------------------------------------
+
+TITLE: Configure Post Call Analysis
+DESCRIPTION: This section briefly mentions the setup for post-call analysis, indicating it's a feature to be configured later for insights after a call concludes.
+
+SOURCE: https://docs.retellai.com/build/conversation-flow/global-setting
+
+LANGUAGE: APIDOC
+CODE:
+```
+Post Call Analysis:
+  - Configuration for post-call analysis features.
+  - Typically set up later for detailed insights.
+```
+
+----------------------------------------
+
+TITLE: JSON: Example Response for Get Phone Number API
+DESCRIPTION: This JSON object represents a successful response when retrieving phone number details from the Retell AI API. It includes the phone number, type, associated agent IDs, and other relevant metadata returned by the API.
+
+SOURCE: https://docs.retellai.com/api-references/get-phone-number
+
+LANGUAGE: JSON
+CODE:
+```
+{
+  "phone_number": "+14157774444",
+  "phone_number_type": "retell-twilio",
+  "phone_number_pretty": "+1 (415) 777-4444",
+  "inbound_agent_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+  "outbound_agent_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+  "inbound_agent_version": 1,
+  "outbound_agent_version": 1,
+  "area_code": 415,
+  "nickname": "Frontdesk Number",
+  "inbound_webhook_url": "https://example.com/inbound-webhook",
+  "last_modification_timestamp": 1703413636133
+}
+```
+
+----------------------------------------
+
+TITLE: Retell LLM Response Engine API Response Schema (200 OK)
+DESCRIPTION: This JSON schema illustrates the structure of a successful 200 OK response when retrieving a Retell LLM Response Engine. It details the various properties of the LLM, including its ID, version, model, prompts, general tools, defined states with their prompts and edges, starting state, begin message, default dynamic variables, and knowledge base IDs. This comprehensive structure helps developers understand the data returned by the API for an LLM.
+
+SOURCE: https://docs.retellai.com/api-references/get-retell-llm
+
+LANGUAGE: APIDOC
+CODE:
+```
+{
+  "llm_id": "oBeDLoLOeuAbiuaMFXRtDOLriTJ5tSxD",
+  "version": 0,
+  "is_published": false,
+  "model": "gpt-4o",
+  "s2s_model": "gpt-4o-realtime",
+  "model_temperature": 0,
+  "model_high_priority": true,
+  "tool_call_strict_mode": true,
+  "general_prompt": "You are ...",
+  "general_tools": [
+    {
+      "type": "end_call",
+      "name": "end_call",
+      "description": "End the call with user."
+    }
+  ],
+  "states": [
+    {
+      "name": "information_collection",
+      "state_prompt": "You will follow the steps below to collect information...",
+      "edges": [
+        {
+          "destination_state_name": "appointment_booking",
+          "description": "Transition to book an appointment."
+        }
+      ],
+      "tools": [
+        {
+          "type": "transfer_call",
+          "name": "transfer_to_support",
+          "description": "Transfer to the support team.",
+          "transfer_destination": {
+            "type": "predefined",
+            "number": "16175551212"
+          },
+          "transfer_option": {
+            "type": "cold_transfer",
+            "show_transferee_as_caller": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "appointment_booking",
+      "state_prompt": "You will follow the steps below to book an appointment...",
+      "tools": [
+        {
+          "type": "book_appointment_cal",
+          "name": "book_appointment",
+          "description": "Book an annual check up.",
+          "cal_api_key": "cal_live_xxxxxxxxxxxx",
+          "event_type_id": 60444,
+          "timezone": "America/Los_Angeles"
+        }
+      ]
+    }
+  ],
+  "starting_state": "information_collection",
+  "begin_message": "Hey I am a virtual assistant calling from Retell Hospital.",
+  "default_dynamic_variables": {
+    "customer_name": "John Doe"
+  },
+  "knowledge_base_ids": [
+    "<string>"
+  ],
+  "last_modification_timestamp": 1703413636133
+}
+```
