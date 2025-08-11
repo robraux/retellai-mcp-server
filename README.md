@@ -1,6 +1,6 @@
 # RetellAI MCP Server
 
-This is a Model Context Protocol (MCP) server implementation for RetellAI, allowing AI assistants to interact with RetellAI's voice services.
+This is a Model Context Protocol (MCP) server implementation for RetellAI, allowing AI assistants to interact with RetellAI's voice services. Based on the [RetellAI API](https://docs.retellai.com/api-references/).
 
 ## Features
 
@@ -75,7 +75,9 @@ The RetellAI MCP server provides tools for:
 - `create_phone_call`: Creates a new phone call
 - `create_web_call`: Creates a new web call
 - `get_call`: Gets details of a specific call
+- `update_call`: Updates call metadata and variables
 - `delete_call`: Deletes a specific call
+- `create_batch_call`: Creates batch call campaigns
 
 ### Agent Tools
 
@@ -85,6 +87,7 @@ The RetellAI MCP server provides tools for:
 - `update_agent`: Updates an existing Retell agent
 - `delete_agent`: Deletes a Retell agent
 - `get_agent_versions`: Gets all versions of a Retell agent
+- `publish_agent`: Publishes agent versions
 
 ### Phone Number Tools
 
@@ -93,11 +96,29 @@ The RetellAI MCP server provides tools for:
 - `get_phone_number`: Gets details of a specific phone number
 - `update_phone_number`: Updates a phone number
 - `delete_phone_number`: Deletes a phone number
+- `import_phone_number`: Imports external phone numbers
 
 ### Voice Tools
 
 - `list_voices`: Lists all available Retell voices
 - `get_voice`: Gets details of a specific voice
+
+### Retell LLM Tools
+
+- `list_retell_llms`: Lists all LLM configurations
+- `create_retell_llm`: Creates new LLM setups
+- `get_retell_llm`: Retrieves LLM configuration
+- `update_retell_llm`: Updates LLM settings
+- `delete_retell_llm`: Removes LLM configurations
+
+### Knowledge Base Tools
+
+- `list_knowledge_bases`: Lists all knowledge bases
+- `create_knowledge_base`: Creates new knowledge bases
+- `get_knowledge_base`: Retrieves knowledge base details
+- `update_knowledge_base`: Updates knowledge base properties
+- `delete_knowledge_base`: Removes knowledge bases
+- `create_knowledge_base_document`: Adds documents to knowledge bases
 
 ## License
 
