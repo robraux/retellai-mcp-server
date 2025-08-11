@@ -1,5 +1,5 @@
 {
-  "name": "retellai-mcp-server",
+  "name": "@abhaybabbar/retellai-mcp-server",
   "version": "1.0.2",
   "type": "module",
   "main": "build/index.js",
@@ -19,7 +19,7 @@
     "retell-sdk": "^4.41.0"
   },
   "bin": {
-    "retellai-mcp-server": "build/index.js"
+    "@abhaybabbar/retellai-mcp-server": "build/index.js"
   },
   "devDependencies": {
     "typescript": "^5.9.2"
