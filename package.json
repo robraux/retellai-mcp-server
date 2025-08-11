@@ -15,7 +15,7 @@
   "description": "RetellAi MCP Server",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
-    "dotenv": "^17.2.1",
+    "dotenv": "^16.5.0",
     "retell-sdk": "^4.41.0"
   },
   "bin": {
