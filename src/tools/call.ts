@@ -8,6 +8,7 @@ import {
   ListCallsInputSchema,
   UpdateCallInputSchema,
   DeleteCallInputSchema,
+  CreateBatchCallInputSchema,
 } from "../schemas/index.js";
 import {
   transformPhoneCallInput,
@@ -15,6 +16,8 @@ import {
   transformCallOutput,
   transformListCallsInput,
   transformUpdateCallInput,
+  transformCreateBatchCallInput,
+  transformBatchCallOutput,
 } from "../transformers/index.js";
 import { createToolHandler } from "./utils.js";
 
@@ -108,6 +111,22 @@ export const registerCallTools = (server: McpServer, retellClient: Retell) => {
         };
       } catch (error: any) {
         console.error(`Error deleting call: ${error.message}`);
+        throw error;
+      }
+    })
+  );
+
+  server.tool(
+    "create_batch_call",
+    "Creates a batch call campaign",
+    CreateBatchCallInputSchema.shape,
+    createToolHandler(async (data) => {
+      try {
+        const batchCallDto = transformCreateBatchCallInput(data);
+        const batchCall = await retellClient.batchCall.createBatchCall(batchCallDto);
+        return transformBatchCallOutput(batchCall);
+      } catch (error: any) {
+        console.error(`Error creating batch call: ${error.message}`);
         throw error;
       }
     })

@@ -5,8 +5,13 @@ import {
   CreatePhoneNumberInputSchema,
   GetPhoneNumberInputSchema,
   UpdatePhoneNumberInputSchema,
+  ImportPhoneNumberInputSchema,
 } from "../schemas/index.js";
-import { transformPhoneNumberOutput } from "../transformers/index.js";
+import { 
+  transformPhoneNumberOutput,
+  transformImportPhoneNumberInput,
+  transformImportPhoneNumberOutput,
+} from "../transformers/index.js";
 import { createToolHandler } from "./utils.js";
 
 export const registerPhoneNumberTools = (
@@ -83,6 +88,22 @@ export const registerPhoneNumberTools = (
         success: true,
         message: `Phone number ${data.phoneNumber} deleted successfully`,
       };
+    })
+  );
+
+  server.tool(
+    "import_phone_number",
+    "Imports an external phone number",
+    ImportPhoneNumberInputSchema.shape,
+    createToolHandler(async (data) => {
+      try {
+        const importData = transformImportPhoneNumberInput(data);
+        const phoneNumber = await retellClient.phoneNumber.import(importData);
+        return transformImportPhoneNumberOutput(phoneNumber);
+      } catch (error: any) {
+        console.error(`Error importing phone number: ${error.message}`);
+        throw error;
+      }
     })
   );
 };

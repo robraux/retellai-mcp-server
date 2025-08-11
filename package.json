@@ -14,14 +14,16 @@
   "license": "ISC",
   "description": "RetellAi MCP Server",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.11.0",
-    "dotenv": "^16.5.0",
-    "retell-sdk": "^4.28.0"
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "dotenv": "^17.2.1",
+    "retell-sdk": "^4.41.0"
   },
   "bin": {
     "@abhaybabbar/retellai-mcp-server": "build/index.js"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abhaybabbar/retellai-mcp-server.git"
