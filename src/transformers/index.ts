@@ -14,6 +14,13 @@ import {
   RetellLLMOutputSchema,
   ListCallsInputSchema,
   UpdateCallInputSchema,
+  CreateKnowledgeBaseInputSchema,
+  UpdateKnowledgeBaseInputSchema,
+  ListKnowledgeBasesInputSchema,
+  CreateKnowledgeBaseDocumentInputSchema,
+  CreateBatchCallInputSchema,
+  ImportPhoneNumberInputSchema,
+  PublishAgentInputSchema,
 } from "../schemas/index.js";
 
 // ===== Call Transformers =====
@@ -90,42 +97,58 @@ export const transformUpdateCallInput = (
 export function transformAgentInput(
   input: z.infer<typeof CreateAgentInputSchema>
 ) {
+  // Handle response_engine: could be reference or inline configuration
+  let response_engine;
+  if ('llm_id' in input.response_engine) {
+    // Reference to existing LLM
+    response_engine = {
+      type: input.response_engine.type,
+      llm_id: input.response_engine.llm_id,
+      version: input.response_engine.version,
+    };
+  } else {
+    // Inline LLM configuration - will be handled by agent creation logic
+    response_engine = input.response_engine;
+  }
+
   return {
-    response_engine: input.response_engine,
+    response_engine,
     voice_id: input.voice_id,
     agent_name: input.agent_name,
     voice_model: input.voice_model,
-    // fallback_voice_ids: input.fallback_voice_ids,
-    // voice_temperature: input.voice_temperature,
-    // voice_speed: input.voice_speed,
-    // volume: input.volume,
-    // responsiveness: input.responsiveness,
-    // interruption_sensitivity: input.interruption_sensitivity,
-    // enable_backchannel: input.enable_backchannel,
-    // backchannel_frequency: input.backchannel_frequency,
-    // backchannel_words: input.backchannel_words,
-    // reminder_trigger_ms: input.reminder_trigger_ms,
-    // reminder_max_count: input.reminder_max_count,
-    // ambient_sound: input.ambient_sound,
-    // ambient_sound_volume: input.ambient_sound_volume,
-    // language: input.language,
-    // webhook_url: input.webhook_url,
-    // boosted_keywords: input.boosted_keywords,
-    // enable_transcription_formatting: input.enable_transcription_formatting,
-    // opt_out_sensitive_data_storage: input.opt_out_sensitive_data_storage,
-    // opt_in_signed_url: input.opt_in_signed_url,
-    // pronunciation_dictionary: input.pronunciation_dictionary,
-    // normalize_for_speech: input.normalize_for_speech,
-    // end_call_after_silence_ms: input.end_call_after_silence_ms,
-    // max_call_duration_ms: input.max_call_duration_ms,
-    // enable_voicemail_detection: input.enable_voicemail_detection,
-    // voicemail_message: input.voicemail_message,
-    // voicemail_detection_timeout_ms: input.voicemail_detection_timeout_ms,
-    // post_call_analysis_data: input.post_call_analysis_data,
-    // post_call_analysis_model: input.post_call_analysis_model,
-    // begin_message_delay_ms: input.begin_message_delay_ms,
-    // ring_duration_ms: input.ring_duration_ms,
-    // stt_mode: input.stt_mode,
+    fallback_voice_ids: input.fallback_voice_ids,
+    voice_temperature: input.voice_temperature,
+    voice_speed: input.voice_speed,
+    volume: input.volume,
+    responsiveness: input.responsiveness,
+    interruption_sensitivity: input.interruption_sensitivity,
+    enable_backchannel: input.enable_backchannel,
+    backchannel_frequency: input.backchannel_frequency,
+    backchannel_words: input.backchannel_words,
+    reminder_trigger_ms: input.reminder_trigger_ms,
+    reminder_max_count: input.reminder_max_count,
+    ambient_sound: input.ambient_sound,
+    ambient_sound_volume: input.ambient_sound_volume,
+    language: input.language,
+    webhook_url: input.webhook_url,
+    boosted_keywords: input.boosted_keywords,
+    enable_transcription_formatting: input.enable_transcription_formatting,
+    opt_out_sensitive_data_storage: input.opt_out_sensitive_data_storage,
+    opt_in_signed_url: input.opt_in_signed_url,
+    pronunciation_dictionary: input.pronunciation_dictionary,
+    normalize_for_speech: input.normalize_for_speech,
+    end_call_after_silence_ms: input.end_call_after_silence_ms,
+    max_call_duration_ms: input.max_call_duration_ms,
+    voicemail_option: input.voicemail_option,
+    post_call_analysis_data: input.post_call_analysis_data,
+    post_call_analysis_model: input.post_call_analysis_model,
+    begin_message_delay_ms: input.begin_message_delay_ms,
+    ring_duration_ms: input.ring_duration_ms,
+    stt_mode: input.stt_mode,
+    vocab_specialization: input.vocab_specialization,
+    allow_user_dtmf: input.allow_user_dtmf,
+    user_dtmf_options: input.user_dtmf_options,
+    denoising_mode: input.denoising_mode,
   };
 }
 
@@ -134,8 +157,20 @@ export function transformUpdateAgentInput(
 ) {
   const updateData: any = {};
 
-  if (input.response_engine !== undefined)
-    updateData.response_engine = input.response_engine;
+  // Handle response_engine: could be reference or inline configuration
+  if (input.response_engine !== undefined) {
+    if ('llm_id' in input.response_engine) {
+      // Reference to existing LLM
+      updateData.response_engine = {
+        type: input.response_engine.type,
+        llm_id: input.response_engine.llm_id,
+        version: input.response_engine.version,
+      };
+    } else {
+      // Inline LLM configuration - will be handled by agent update logic
+      updateData.response_engine = input.response_engine;
+    }
+  }
   if (input.voice_id !== undefined) updateData.voice_id = input.voice_id;
   if (input.agent_name !== undefined) updateData.agent_name = input.agent_name;
   if (input.voice_model !== undefined)
@@ -305,16 +340,16 @@ export function transformRetellLLMInput(
   input: z.infer<typeof CreateRetellLLMInputSchema>
 ) {
   return {
-    // version: input.version,
+    version: input.version,
     model: input.model,
-    // s2s_model: input.s2s_model,
-    // model_temperature: input.model_temperature,
-    // model_high_priority: input.model_high_priority,
-    // tool_call_strict_mode: input.tool_call_strict_mode,
+    s2s_model: input.s2s_model,
+    model_temperature: input.model_temperature,
+    model_high_priority: input.model_high_priority,
+    tool_call_strict_mode: input.tool_call_strict_mode,
     general_prompt: input.general_prompt,
-    // general_tools: input.general_tools,
-    // states: input.states,
-    // starting_state: input.starting_state,
+    general_tools: input.general_tools as any,
+    states: input.states as any,
+    starting_state: input.starting_state,
     begin_message: input.begin_message,
     default_dynamic_variables: input.default_dynamic_variables,
     knowledge_base_ids: input.knowledge_base_ids,
@@ -339,9 +374,9 @@ export function transformUpdateRetellLLMInput(
     updateData.general_prompt = input.general_prompt;
   if (input.general_tools !== undefined)
     updateData.general_tools = input.general_tools;
-  // if (input.states !== undefined) updateData.states = input.states;
-  // if (input.starting_state !== undefined)
-  //   updateData.starting_state = input.starting_state;
+  if (input.states !== undefined) updateData.states = input.states;
+  if (input.starting_state !== undefined)
+    updateData.starting_state = input.starting_state;
   if (input.begin_message !== undefined)
     updateData.begin_message = input.begin_message;
   if (input.default_dynamic_variables !== undefined)
@@ -364,12 +399,168 @@ export function transformRetellLLMOutput(
     model_high_priority: llm.model_high_priority,
     tool_call_strict_mode: llm.tool_call_strict_mode,
     general_prompt: llm.general_prompt,
-    // general_tools: llm.general_tools,
-    // states: llm.states,
-    // starting_state: llm.starting_state,
+    general_tools: llm.general_tools,
+    states: llm.states,
+    starting_state: llm.starting_state,
     begin_message: llm.begin_message,
     default_dynamic_variables: llm.default_dynamic_variables,
     knowledge_base_ids: llm.knowledge_base_ids,
     last_modification_timestamp: llm.last_modification_timestamp,
+  };
+}
+
+// ===== New Knowledge Base Transformers =====
+
+export function transformCreateKnowledgeBaseInput(
+  input: z.infer<typeof CreateKnowledgeBaseInputSchema>
+) {
+  return {
+    name: input.name,
+    description: input.description,
+  };
+}
+
+export function transformUpdateKnowledgeBaseInput(
+  input: z.infer<typeof UpdateKnowledgeBaseInputSchema>
+) {
+  const updateData: any = {};
+  
+  if (input.name !== undefined) updateData.name = input.name;
+  if (input.description !== undefined) updateData.description = input.description;
+  
+  return updateData;
+}
+
+export function transformListKnowledgeBasesInput(
+  input: z.infer<typeof ListKnowledgeBasesInputSchema>
+) {
+  return {
+    limit: input.limit,
+    offset: input.offset,
+  };
+}
+
+export function transformCreateKnowledgeBaseDocumentInput(
+  input: z.infer<typeof CreateKnowledgeBaseDocumentInputSchema>
+) {
+  return {
+    source_type: input.sourceType,
+    source_config: input.sourceConfig,
+  };
+}
+
+// ===== Batch Call Transformers =====
+
+export function transformCreateBatchCallInput(
+  input: z.infer<typeof CreateBatchCallInputSchema>
+) {
+  // Transform CSV data to tasks format expected by SDK
+  const tasks = input.csv_data.split('\n')
+    .slice(1) // Skip header row
+    .filter(row => row.trim()) // Filter empty rows
+    .map(row => {
+      const columns = row.split(',');
+      const phoneNumber = columns[0]?.trim();
+      const retell_llm_dynamic_variables: { [key: string]: string } = {};
+      
+      // Map additional columns to dynamic variables
+      if (columns.length > 1) {
+        columns.slice(1).forEach((value, index) => {
+          retell_llm_dynamic_variables[`var_${index + 1}`] = value?.trim() || '';
+        });
+      }
+      
+      return {
+        to_number: phoneNumber,
+        retell_llm_dynamic_variables,
+      };
+    })
+    .filter(task => task.to_number); // Only include tasks with valid phone numbers
+
+  return {
+    name: input.name,
+    from_number: input.from_number,
+    tasks,
+    trigger_timestamp: input.schedule_time,
+  };
+}
+
+export function transformBatchCallOutput(batchCall: any) {
+  return {
+    batch_call_id: batchCall.batch_call_id,
+    name: batchCall.name,
+    status: batchCall.status,
+    from_number: batchCall.from_number,
+    agent_id: batchCall.agent_id,
+    total_calls: batchCall.total_calls,
+    completed_calls: batchCall.completed_calls,
+    failed_calls: batchCall.failed_calls,
+    created_at: batchCall.created_at,
+    started_at: batchCall.started_at,
+    completed_at: batchCall.completed_at,
+    metadata: batchCall.metadata,
+  };
+}
+
+// ===== Import Phone Number Transformers =====
+
+export function transformImportPhoneNumberInput(
+  input: z.infer<typeof ImportPhoneNumberInputSchema>
+) {
+  // Generate termination URI based on carrier - this is a simplified mapping
+  const generateTerminationUri = (carrier: string) => {
+    const lowerCarrier = carrier.toLowerCase();
+    if (lowerCarrier.includes('twilio')) {
+      return `${input.phone_number.replace('+', '')}.pstn.twilio.com`;
+    }
+    // Default fallback for other carriers
+    return `${lowerCarrier}.sip.example.com`;
+  };
+
+  return {
+    phone_number: input.phone_number,
+    termination_uri: generateTerminationUri(input.carrier),
+    inbound_agent_id: input.inbound_agent_id,
+    outbound_agent_id: input.outbound_agent_id,
+    nickname: input.nickname,
+    inbound_webhook_url: input.inbound_webhook_url,
+  };
+}
+
+export function transformImportPhoneNumberOutput(phoneNumber: any) {
+  return {
+    phone_number: phoneNumber.phone_number,
+    phone_number_pretty: phoneNumber.phone_number_pretty,
+    phone_number_type: phoneNumber.phone_number_type,
+    carrier: phoneNumber.carrier,
+    import_status: phoneNumber.import_status,
+    verification_code: phoneNumber.verification_code,
+    verification_required: phoneNumber.verification_required,
+    inbound_agent_id: phoneNumber.inbound_agent_id,
+    outbound_agent_id: phoneNumber.outbound_agent_id,
+    nickname: phoneNumber.nickname,
+    inbound_webhook_url: phoneNumber.inbound_webhook_url,
+    imported_at: phoneNumber.imported_at,
+    last_modification_timestamp: phoneNumber.last_modification_timestamp,
+  };
+}
+
+// ===== Agent Publishing Transformers =====
+
+export function transformPublishAgentInput(
+  input: z.infer<typeof PublishAgentInputSchema>
+) {
+  return {
+    version: input.version,
+  };
+}
+
+export function transformPublishAgentOutput(result: any) {
+  return {
+    agent_id: result.agent_id,
+    published_version: result.published_version,
+    is_published: result.is_published,
+    publication_timestamp: result.publication_timestamp,
+    previous_published_version: result.previous_published_version,
   };
 }
