@@ -1,6 +1,6 @@
 # Changes Log - Retell.ai MCP Server Updates
 
-## Version 1.1.0 - August 8, 2025
+## Version 1.1.0 - August 21, 2025
 
 ### 🚀 Major Updates: Complete API Parity Implementation
 

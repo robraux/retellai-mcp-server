@@ -24,7 +24,7 @@ Review and update the Retell.ai MCP (Model Context Protocol) server implementati
      - Error handling
 
 2. **Parse API Specification**
-   - Load the current Retell.ai specification via @docs/retell-llm.txt or https://context7.com/context7/docs_retellai_com/llms.txt
+   - Load the current Retell.ai OpenAPI specification.
    - Extract all endpoints with their:
      - Operation IDs
      - HTTP methods and paths
