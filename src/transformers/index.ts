@@ -89,6 +89,7 @@ export const transformUpdateCallInput = (
   return {
     metadata: data.metadata,
     retell_llm_dynamic_variables: data.dynamicVariables,
+    override_dynamic_variables: data.overrideDynamicVariables,
   };
 };
 

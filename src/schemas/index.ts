@@ -123,6 +123,7 @@ export const UpdateCallInputSchema = z.object({
   callId: z.string().describe("The ID of the call to update"),
   metadata: z.record(z.string()).optional(),
   dynamicVariables: z.record(z.string()).optional(),
+  overrideDynamicVariables: z.record(z.string()).nullable().optional().describe("Override dynamic variables represented as key-value pairs of strings. These are provided during call-updates and have the highest priority."),
 });
 
 // Delete Call Input Schema
@@ -808,6 +809,9 @@ export const CreatePhoneNumberInputSchema = z.object({
   outboundAgentId: z.string().optional(),
   nickname: z.string().optional(),
   inboundWebhookUrl: z.string().optional(),
+  countryCode: z.enum(["US", "CA"]).optional().describe("The ISO 3166-1 alpha-2 country code of the number you are trying to purchase. If left empty, will default to 'US'."),
+  tollFree: z.boolean().optional().describe("Whether to purchase a toll-free number. Toll-free numbers incur higher costs."),
+  phoneNumber: z.string().optional().describe("The number you are trying to purchase in E.164 format (+country code then number with no space and no special characters)."),
 });
 
 export const GetPhoneNumberInputSchema = z.object({

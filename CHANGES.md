@@ -1,5 +1,47 @@
 # Changes Log - Retell.ai MCP Server Updates
 
+## Version 1.1.1 - August 21, 2025
+
+### 🔧 API Update: Retell SDK 4.41.0 → 4.43.0
+
+Minor version update that enhances existing endpoints with new optional parameters while maintaining full backward compatibility.
+
+#### Enhanced Phone Number Creation (`create_phone_number`)
+Added three new **optional** parameters for more granular phone number provisioning:
+
+- **`countryCode`** - Specify country code for number acquisition
+  - Type: `enum ["US", "CA"]`  
+  - Default: `"US"`
+  - Description: ISO 3166-1 alpha-2 country code for the number
+
+- **`tollFree`** - Purchase toll-free numbers
+  - Type: `boolean`
+  - Description: Whether to purchase a toll-free number (higher costs apply)
+
+- **`phoneNumber`** - Request specific phone number
+  - Type: `string` (E.164 format)
+  - Example: `"+14157774444"`
+  - Description: Specific number to purchase
+
+#### Enhanced Call Updates (`update_call`)
+Added dynamic variable override functionality:
+
+- **`overrideDynamicVariables`** - High-priority variable override
+  - Type: `object` (key-value pairs, nullable)
+  - Description: Override dynamic variables with highest priority during call updates
+  - Example: `{ "additional_discount": "15%" }`
+
+#### Updated Dependencies
+- `retell-sdk`: `4.41.0` → `4.43.0`
+
+#### Backward Compatibility
+- ✅ **Full backward compatibility maintained**
+- ✅ All existing tool calls work unchanged
+- ✅ New parameters are optional additions only
+- ✅ No breaking changes
+
+---
+
 ## Version 1.1.0 - August 21, 2025
 
 ### 🚀 Major Updates: Complete API Parity Implementation
