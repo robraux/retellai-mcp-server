@@ -31,12 +31,44 @@ The RetellAI MCP server provides tools for:
       "command": "npx",
       "args": ["-y", "@robraux/retellai-mcp-server"],
       "env": {
-        "RETELL_API_KEY": "<your_retellai_token>"
+        "RETELL_API_KEY": "<your_retellai_token>",
+        // Optional: Only needed for Test Case Definition tools (undocumented API)
+        "RETELL_UNDOCUMENTED_BEARER_TOKEN": "<your_bearer_token>",
+        "RETELL_UNDOCUMENTED_ORG_ID": "<your_workspace_org_id>"
       }
     }
   }
 }
 ```
+
+## Environment Variables
+
+The RetellAI MCP server uses a two-tier authentication system:
+
+### Required: Standard API Key
+- **`RETELL_API_KEY`**: Your RetellAI API key for all documented APIs
+- Get this from: [RetellAI Dashboard > API Key](https://dashboard.retellai.com/apiKey)
+- Required for: All 31 documented tools (calls, agents, phone numbers, voices, LLMs, knowledge bases)
+
+### Optional: Undocumented API Credentials
+- **`RETELL_UNDOCUMENTED_BEARER_TOKEN`**: Bearer token for undocumented APIs
+- **`RETELL_UNDOCUMENTED_ORG_ID`**: Your workspace/organization ID
+- Required for: Only the 4 Test Case Definition tools (simulation testing)
+- **These are completely optional** - the server works perfectly without them
+
+#### How to Find Undocumented Credentials
+
+If you want to use the Test Case Definition tools, you can find these values using your browser's Developer Tools:
+
+1. **Open Browser DevTools**: Press F12 or right-click and select "Inspect"
+2. **Go to Network Tab**: Click the "Network" tab in DevTools
+3. **Login to RetellAI**: Navigate to your specific workspace in the [RetellAI Dashboard](https://dashboard.retellai.com)
+4. **Monitor Network Requests**: Look for API requests to `api.retellai.com`
+5. **Find Headers**: Look for requests that include both:
+   - `Authorization: Bearer <token>` (this is your `RETELL_UNDOCUMENTED_BEARER_TOKEN`)
+   - `Orgid: org_<id>` (this is your `RETELL_UNDOCUMENTED_ORG_ID`)
+
+**Note**: The Org ID is your Workspace ID and follows the format `org_XXXXXXXXXXXXXXXXXXXXXXXX`
 
 ## Example use cases:
 
