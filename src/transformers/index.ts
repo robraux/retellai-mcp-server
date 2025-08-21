@@ -21,6 +21,10 @@ import {
   CreateBatchCallInputSchema,
   ImportPhoneNumberInputSchema,
   PublishAgentInputSchema,
+  ListTestCaseDefinitionsInputSchema,
+  CreateTestCaseDefinitionInputSchema,
+  UpdateTestCaseDefinitionInputSchema,
+  DeleteTestCaseDefinitionInputSchema,
 } from "../schemas/index.js";
 
 // ===== Call Transformers =====
@@ -563,5 +567,67 @@ export function transformPublishAgentOutput(result: any) {
     is_published: result.is_published,
     publication_timestamp: result.publication_timestamp,
     previous_published_version: result.previous_published_version,
+  };
+}
+
+// ===== Test Case Definition Transformers =====
+
+export function transformListTestCaseDefinitionsInput(
+  input: z.infer<typeof ListTestCaseDefinitionsInputSchema>
+) {
+  return {
+    type: input.type,
+    llm_id: input.llm_id,
+    version: input.version ?? 4, // Default to 4 if not provided
+  };
+}
+
+export function transformCreateTestCaseDefinitionInput(
+  input: z.infer<typeof CreateTestCaseDefinitionInputSchema>
+) {
+  return {
+    name: input.name,
+    type: input.type,
+    user_prompt: input.user_prompt,
+    metrics: input.metrics,
+    response_engine: input.response_engine,
+    dynamic_variables: input.dynamic_variables,
+    llm_model: input.llm_model,
+    description: input.description,
+    tool_mocks: input.tool_mocks,
+  };
+}
+
+export function transformUpdateTestCaseDefinitionInput(
+  input: z.infer<typeof UpdateTestCaseDefinitionInputSchema>
+) {
+  return {
+    test_case_definition_id: input.test_case_definition_id,
+    name: input.name,
+    type: input.type,
+    user_prompt: input.user_prompt,
+    metrics: input.metrics,
+    response_engine: input.response_engine,
+    dynamic_variables: input.dynamic_variables,
+    llm_model: input.llm_model,
+    description: input.description,
+    tool_mocks: input.tool_mocks,
+  };
+}
+
+export function transformTestCaseDefinitionOutput(testCase: any) {
+  return {
+    test_case_definition_id: testCase.test_case_definition_id,
+    name: testCase.name,
+    type: testCase.type,
+    user_prompt: testCase.user_prompt,
+    metrics: testCase.metrics,
+    response_engine: testCase.response_engine,
+    dynamic_variables: testCase.dynamic_variables,
+    llm_model: testCase.llm_model,
+    description: testCase.description,
+    tool_mocks: testCase.tool_mocks,
+    creation_timestamp: testCase.creation_timestamp,
+    user_modified_timestamp: testCase.user_modified_timestamp,
   };
 }

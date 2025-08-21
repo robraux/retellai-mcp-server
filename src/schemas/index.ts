@@ -1432,3 +1432,73 @@ export const PublishAgentOutputSchema = z.object({
   publication_timestamp: z.number(),
   previous_published_version: z.number().optional(),
 });
+
+// ===== Test Case Definition Schemas =====
+
+export const LLMModelSchema = z.enum([
+  "gpt-4o",
+  "gpt-4o-mini", 
+  "gpt-4.1",
+  "gpt-4.1-mini",
+  "gpt-4.1-nano",
+  "claude-3.7-sonnet",
+  "claude-3.5-haiku",
+  "gemini-2.0-flash",
+  "gemini-2.0-flash-lite",
+]);
+
+export const ResponseEngineSchema = z.object({
+  type: z.literal("retell-llm").describe("Response engine type"),
+  llm_id: z.string().describe("ID of the Retell LLM configuration"),
+  version: z.number().optional().describe("Optional version lock"),
+});
+
+export const ListTestCaseDefinitionsInputSchema = z.object({
+  type: z.literal("retell-llm").describe("Filter by response engine type"),
+  llm_id: z.string().describe("LLM identifier to filter by"),
+  version: z.number().optional().describe("Optional specific LLM version"),
+});
+
+export const CreateTestCaseDefinitionInputSchema = z.object({
+  name: z.string().describe("Name of the test case"),
+  type: z.literal("simulation").default("simulation").describe("Type of test case"),
+  user_prompt: z.string().describe("Instructions for the simulated user"),
+  metrics: z.array(z.string()).describe("Success criteria for the test"),
+  response_engine: ResponseEngineSchema,
+  dynamic_variables: z.record(z.string()).describe("Key-value pairs for test data"),
+  llm_model: LLMModelSchema.optional().describe("Model override for this test case"),
+  description: z.string().optional().describe("Optional description of the test case"),
+  tool_mocks: z.array(z.any()).optional().describe("Mock tool responses for simulation testing"),
+});
+
+export const UpdateTestCaseDefinitionInputSchema = z.object({
+  test_case_definition_id: z.string().describe("ID of the test case to update"),
+  name: z.string().describe("Name of the test case"),
+  type: z.literal("simulation").default("simulation").describe("Type of test case"),
+  user_prompt: z.string().describe("Instructions for the simulated user"),
+  metrics: z.array(z.string()).describe("Success criteria for the test"),
+  response_engine: ResponseEngineSchema,
+  dynamic_variables: z.record(z.string()).describe("Key-value pairs for test data"),
+  llm_model: LLMModelSchema.optional().describe("Model override for this test case"),
+  description: z.string().optional().describe("Optional description of the test case"),
+  tool_mocks: z.array(z.any()).optional().describe("Mock tool responses for simulation testing"),
+});
+
+export const DeleteTestCaseDefinitionInputSchema = z.object({
+  test_case_definition_id: z.string().describe("ID of the test case to delete"),
+});
+
+export const TestCaseDefinitionOutputSchema = z.object({
+  test_case_definition_id: z.string(),
+  name: z.string(),
+  type: z.string(),
+  user_prompt: z.string(),
+  metrics: z.array(z.string()),
+  response_engine: ResponseEngineSchema,
+  dynamic_variables: z.record(z.string()),
+  llm_model: LLMModelSchema.nullable().optional(),
+  description: z.string().nullable().optional(),
+  tool_mocks: z.array(z.any()).nullable().optional(),
+  creation_timestamp: z.number(),
+  user_modified_timestamp: z.number(),
+});
