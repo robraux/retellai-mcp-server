@@ -60,7 +60,7 @@ The API key can be obtained from https://dashboard.retellai.com/apiKey
 
 This server is designed to be used with Claude Desktop through the MCP configuration. It exposes RetellAI's capabilities as tools that can be invoked by the AI assistant to create voice agents, manage calls, configure phone numbers, and manage knowledge bases programmatically.
 
-## Available Tools (27 total)
+## Available Tools (31 total)
 
 ### Call Management (7 tools)
 - `create_phone_call` - Initiate outbound phone calls
@@ -107,6 +107,12 @@ This server is designed to be used with Claude Desktop through the MCP configura
 - `delete_knowledge_base` - Remove knowledge bases
 - `create_knowledge_base_document` - Add documents to knowledge bases
 
+### Test Case Definition Management (4 tools)
+- `list_test_case_definitions` - List test case definitions for a specific Retell LLM
+- `create_test_case_definition` - Create new test case definitions for simulation testing
+- `update_test_case_definition` - Update existing test case definitions (full replacement)
+- `delete_test_case_definition` - Delete test case definitions by ID
+
 ## Enhanced Agent Configuration
 
 Agents now support 25+ advanced configuration options including:
@@ -118,3 +124,24 @@ Agents now support 25+ advanced configuration options including:
 - Multi-language support (18 languages)
 - Post-call analysis configuration
 - Voicemail handling options
+
+## Test Case Definition Features
+
+The server now includes support for **undocumented RetellAI Test Case Definition APIs** that enable simulation testing of voice agents:
+
+### Key Features:
+- **Simulation Testing**: Create test cases that simulate user interactions with voice agents
+- **LLM Integration**: Test cases are linked to specific Retell LLM configurations via `llm_id`
+- **Model Override**: Override the LLM model (e.g., `gpt-4o`, `claude-3.5-sonnet`) for A/B testing
+- **Dynamic Variables**: Flexible key-value pairs for test data injection
+- **Success Metrics**: Define evaluation criteria as string arrays for test validation
+- **Tool Mocking**: Support for mock tool responses during simulation testing
+
+### Supported Models:
+- `gpt-4o`, `gpt-4o-mini`
+- `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`
+- `claude-3.7-sonnet`, `claude-3.5-haiku`
+- `gemini-2.0-flash`, `gemini-2.0-flash-lite`
+
+### Implementation Note:
+These tools use direct HTTP calls to undocumented RetellAI endpoints via the SDK's underlying APIClient, as the official SDK doesn't provide native support for test case definitions.
