@@ -1,4 +1,6 @@
-# RetellAI MCP Server
+# RetellAI MCP Server — Forked & Maintained by [Rob Raux]
+
+This project is a **fork** of [abhaybabbar/retellai-mcp-server](https://github.com/abhaybabbar/retellai-mcp-server), originally licensed under the MIT License. This fork is independently maintained and extended under the same license.
 
 This is a Model Context Protocol (MCP) server implementation for RetellAI, allowing AI assistants to interact with RetellAI's voice services. Based on the [RetellAI API](https://docs.retellai.com/api-references/).
 
@@ -120,6 +122,3 @@ The RetellAI MCP server provides tools for:
 - `delete_knowledge_base`: Removes knowledge bases
 - `create_knowledge_base_document`: Adds documents to knowledge bases
 
-## License
-
-MIT
