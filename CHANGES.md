@@ -1,6 +1,98 @@
 # Changes Log - Retell.ai MCP Server Updates
 
-## Version 1.1.0 - August 8, 2025
+## Version 1.1.1 - August 21, 2025
+
+### 🔧 API Update: Retell SDK 4.41.0 → 4.43.0
+
+Minor version update that enhances existing endpoints with new optional parameters while maintaining full backward compatibility.
+
+### 🚀 NEW: Undocumented API Implementation - Test Case Definition Tools
+
+**Major Feature Addition**: First implementation of **undocumented RetellAI APIs** in the MCP server, adding comprehensive simulation testing capabilities for voice agents.
+
+#### New Test Case Definition Tools (4 tools)
+Added complete CRUD operations for test case definitions:
+
+- **`list_test_case_definitions`** - Lists test case definitions for a specific Retell LLM
+  - Required: `llm_id`, `type: "retell-llm"`
+  - Optional: `version` (specific LLM version)
+  - Returns array of test case definitions with full metadata
+
+- **`create_test_case_definition`** - Creates new test case definitions for simulation testing
+  - Required: `name`, `user_prompt`, `metrics[]`, `response_engine{}`, `dynamic_variables{}`
+  - Optional: `description`, `llm_model`, `tool_mocks[]`
+  - Supports all 9 LLM models with override capability
+
+- **`update_test_case_definition`** - Updates existing test case definitions (full replacement)
+  - Full object replacement pattern (not partial updates)
+  - Automatically updates `user_modified_timestamp`
+  - Maintains test case version history
+
+- **`delete_test_case_definition`** - Deletes test case definitions by ID
+  - Requires `test_case_definition_id` in format `test_case_XXXXXXXXXXXX`
+  - Returns success confirmation
+
+#### Technical Implementation Approach
+**Innovation**: Direct HTTP calls via SDK's underlying `APIClient`
+- Uses `retellClient.get()`, `.post()`, `.put()`, `.delete()` methods
+- Bypasses SDK limitations for undocumented endpoints
+- Maintains full type safety with Zod schemas and TypeScript interfaces
+- Follows existing MCP tool patterns for consistency
+
+#### Supported LLM Models (9 total)
+- **OpenAI**: `gpt-4o`, `gpt-4o-mini`, `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`
+- **Anthropic**: `claude-3.7-sonnet`, `claude-3.5-haiku`
+- **Google**: `gemini-2.0-flash`, `gemini-2.0-flash-lite`
+
+#### Simulation Testing Features
+- **User Prompt Simulation**: Define instructions for simulated user interactions
+- **Success Metrics**: String array criteria for test evaluation
+- **Dynamic Variables**: Flexible key-value pairs for test data injection
+- **Model Override**: A/B test different models with identical LLM configurations
+- **Tool Mocking**: Mock tool responses for comprehensive testing scenarios
+
+#### Tool Count Update: 27 → **31 Tools**
+- Previous categories unchanged (Call: 7, Agent: 7, Phone: 6, Voice: 2, LLM: 5, KB: 6)
+- **NEW**: Test Case Definition: 4 tools
+- **Total Coverage**: Both documented and undocumented APIs
+
+#### Enhanced Phone Number Creation (`create_phone_number`)
+Added three new **optional** parameters for more granular phone number provisioning:
+
+- **`countryCode`** - Specify country code for number acquisition
+  - Type: `enum ["US", "CA"]`  
+  - Default: `"US"`
+  - Description: ISO 3166-1 alpha-2 country code for the number
+
+- **`tollFree`** - Purchase toll-free numbers
+  - Type: `boolean`
+  - Description: Whether to purchase a toll-free number (higher costs apply)
+
+- **`phoneNumber`** - Request specific phone number
+  - Type: `string` (E.164 format)
+  - Example: `"+14157774444"`
+  - Description: Specific number to purchase
+
+#### Enhanced Call Updates (`update_call`)
+Added dynamic variable override functionality:
+
+- **`overrideDynamicVariables`** - High-priority variable override
+  - Type: `object` (key-value pairs, nullable)
+  - Description: Override dynamic variables with highest priority during call updates
+  - Example: `{ "additional_discount": "15%" }`
+
+#### Updated Dependencies
+- `retell-sdk`: `4.41.0` → `4.43.0`
+
+#### Backward Compatibility
+- ✅ **Full backward compatibility maintained**
+- ✅ All existing tool calls work unchanged
+- ✅ New parameters are optional additions only
+- ✅ No breaking changes
+
+---
+
+## Version 1.1.0 - August 21, 2025
 
 ### 🚀 Major Updates: Complete API Parity Implementation
 
@@ -106,7 +198,7 @@ Added comprehensive agent configuration options:
 
 ## 📋 Tool Summary
 
-### Current Tool Count: **27 tools** (↑6 from 21)
+### Current Tool Count: **31 tools** (↑4 from 27 in v1.1.1, ↑10 from 21 original)
 
 | Category | Tools | Status |
 |----------|-------|--------|
@@ -115,9 +207,10 @@ Added comprehensive agent configuration options:
 | **Phone Numbers** | 6 tools | ✅ Complete (+1 import) |
 | **Voice Management** | 2 tools | ✅ Complete |
 | **Retell LLM** | 5 tools | ✅ Complete |
-| **Knowledge Base** | 6 tools | ✅ **NEW** |
+| **Knowledge Base** | 6 tools | ✅ Complete |
+| **Test Case Definitions** | 4 tools | ✅ **NEW** (v1.1.1 - Undocumented APIs) |
 
-### API Coverage: **100%** (↑from ~75%)
+### API Coverage: **100% Documented + Undocumented APIs** (↑from ~75%)
 
 ---
 
@@ -128,6 +221,11 @@ Some advanced features are prepared for future SDK versions:
 - **Batch Calls**: Framework implemented, awaiting SDK method availability
 - **Phone Import**: Structure ready for SDK integration
 - **Agent Publishing**: Prepared for SDK publishing endpoint
+
+**Undocumented API Implementation** (v1.1.1):
+- **Test Case Definitions**: Uses direct HTTP calls via SDK's underlying APIClient
+- These endpoints are not officially documented but are fully functional
+- Implementation bypasses SDK limitations while maintaining type safety
 
 All tools are implemented with graceful fallbacks and clear error messaging for unsupported operations.
 

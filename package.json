@@ -1,35 +1,62 @@
 {
-  "name": "@abhaybabbar/retellai-mcp-server",
-  "version": "1.0.2",
+  "name": "@robraux/retellai-mcp-server",
+  "version": "1.1.0",
   "type": "module",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/index.js",
+      "types": "./build/index.d.ts"
+    }
+  },
   "scripts": {
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
     "prepare": "npm run build",
     "watch": "tsc --watch",
     "inspector": "npx @modelcontextprotocol/inspector build/index.js"
   },
-  "keywords": [],
-  "author": "abhaybabbar",
-  "license": "ISC",
-  "description": "RetellAi MCP Server",
+  "keywords": [
+    "mcp",
+    "retellai",
+    "voice",
+    "ai"
+  ],
+  "author": "robraux",
+  "contributors": [
+    "abhaybabbar (original author)"
+  ],
+  "license": "MIT",
+  "description": "Retell.ai MCP Server - Fork of @abhaybabbar/retellai-mcp-server",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
     "dotenv": "^16.5.0",
-    "retell-sdk": "^4.41.0"
+    "retell-sdk": "4.43.0"
   },
   "bin": {
-    "@abhaybabbar/retellai-mcp-server": "build/index.js"
+    "@robraux/retellai-mcp-server": "build/index.js"
   },
   "devDependencies": {
     "typescript": "^5.9.2"
   },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "build/",
+    "README.md",
+    "LICENSE",
+    "CHANGES.md"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abhaybabbar/retellai-mcp-server.git"
+    "url": "git+https://github.com/robraux/retellai-mcp-server.git"
   },
   "bugs": {
-    "url": "https://github.com/abhaybabbar/retellai-mcp-server/issues"
+    "url": "https://github.com/robraux/retellai-mcp-server/issues"
   },
-  "homepage": "https://github.com/abhaybabbar/retellai-mcp-server#readme"
+  "homepage": "https://github.com/robraux/retellai-mcp-server#readme"
 }

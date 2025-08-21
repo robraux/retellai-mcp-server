@@ -4,6 +4,9 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerAllTools } from "./tools/index.js";
 import { createRetellClient } from "./client.js";
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -16,9 +19,15 @@ function createMcpServer() {
 
   const retellClient = createRetellClient(retellApiKey);
 
+  // Read version from package.json
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const packageJsonPath = join(__dirname, "../package.json");
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
+
   const mcpServer = new McpServer({
     name: "Retell MCP",
-    version: "0.1.0",
+    version: packageJson.version,
     capabilities: [],
   });
 

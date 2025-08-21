@@ -39,6 +39,9 @@ export const registerPhoneNumberTools = (
         outbound_agent_id: data.outboundAgentId,
         nickname: data.nickname,
         inbound_webhook_url: data.inboundWebhookUrl,
+        country_code: data.countryCode,
+        toll_free: data.tollFree,
+        phone_number: data.phoneNumber,
       };
       const phoneNumber = await retellClient.phoneNumber.create(
         createPhoneNumberDto

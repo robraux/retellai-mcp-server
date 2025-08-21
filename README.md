@@ -1,4 +1,6 @@
-# RetellAI MCP Server
+# RetellAI MCP Server — Forked & Maintained by [Rob Raux]
+
+This project is a **fork** of [abhaybabbar/retellai-mcp-server](https://github.com/abhaybabbar/retellai-mcp-server), originally licensed under the MIT License. This fork is independently maintained and extended under the same license.
 
 This is a Model Context Protocol (MCP) server implementation for RetellAI, allowing AI assistants to interact with RetellAI's voice services. Based on the [RetellAI API](https://docs.retellai.com/api-references/).
 
@@ -10,6 +12,7 @@ The RetellAI MCP server provides tools for:
 - **Agent Management**: Create and manage voice agents with different LLM configurations
 - **Phone Number Management**: Provision and configure phone numbers
 - **Voice Management**: Access and use different voice options
+- **Test Case Definitions**: Create and manage simulation test cases for voice agents (undocumented API)
 
 ## Claude Desktop Setup
 
@@ -26,7 +29,7 @@ The RetellAI MCP server provides tools for:
   "mcpServers": {
     "retellai-mcp-server": {
       "command": "npx",
-      "args": ["-y", "@abhaybabbar/retellai-mcp-server"],
+      "args": ["-y", "@robraux/retellai-mcp-server"],
       "env": {
         "RETELL_API_KEY": "<your_retellai_token>"
       }
@@ -120,6 +123,12 @@ The RetellAI MCP server provides tools for:
 - `delete_knowledge_base`: Removes knowledge bases
 - `create_knowledge_base_document`: Adds documents to knowledge bases
 
-## License
+### Test Case Definition Tools (Undocumented API)
 
-MIT
+- `list_test_case_definitions`: Lists test case definitions for a specific Retell LLM
+- `create_test_case_definition`: Creates new test case definitions for simulation testing
+- `update_test_case_definition`: Updates existing test case definitions (full replacement)
+- `delete_test_case_definition`: Deletes test case definitions by ID
+
+**Note**: These tools access undocumented RetellAI APIs using direct HTTP calls via the SDK's underlying APIClient. They enable simulation testing of voice agents with support for 9 LLM models including GPT-4o, Claude-3.5-Sonnet, and Gemini-2.0-Flash.
+

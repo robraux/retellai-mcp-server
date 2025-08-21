@@ -7,6 +7,7 @@ import { registerPhoneNumberTools } from "./phone-number.js";
 import { registerKnowledgeBaseTools } from "./knowledge-base.js";
 import { registerVoiceTools } from "./voice.js";
 import { registerRetellLLMTools } from "./retell-llm.js";
+import { registerTestCaseDefinitionTools } from "./test-case-definition.js";
 
 export const registerAllTools = (server: McpServer, retellClient: Retell) => {
   registerCallTools(server, retellClient);
@@ -15,4 +16,5 @@ export const registerAllTools = (server: McpServer, retellClient: Retell) => {
   registerKnowledgeBaseTools(server, retellClient);
   registerVoiceTools(server, retellClient);
   registerRetellLLMTools(server, retellClient);
+  registerTestCaseDefinitionTools(server, retellClient);
 };
